@@ -1,1 +1,2 @@
 What is Javascript ? 
+what is diff between let, var and const ?
