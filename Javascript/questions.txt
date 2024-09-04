@@ -1,1 +1,4 @@
 What is Javascript ? 
+What is callback function ?
+What is different between statments and expressions ?
+what is diff between let, var and const ?
