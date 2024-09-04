@@ -1,3 +1,1 @@
 What is Javascript ? 
-What is callback function ?
-What is different between statments and expressions ?
