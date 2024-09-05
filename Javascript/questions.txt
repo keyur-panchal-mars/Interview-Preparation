@@ -1,4 +1,48 @@
 What is Javascript ? 
+  Javascript is a scripting language for the web. scripting language talks with other programming language.
 What is callback function ?
 What is different between statments and expressions ?
 what is diff between let, var and const ?
+what is reference types
+  Reference types are non primitive types like array and objects.
+What is hoisting in javascript ?
+Hoisting is a concept or behavior in JavaScript where the declaration of a function, variable, or class goes to the top of the scope they were defined in.
+	Defined in global scope.
+	If it is defined and access it before initalization we get the undefined value. If variable is not defined and access it gets error "not defined".
+	Remember, variables are hoisted but only to the top of the scope they were declared in.
+What is diff between let var and const.
+	Let and var both hoisted. 
+	We can use var before defining. It will give undefined. 	
+	We can not use let and const before defining. Will give error of "initalization".
+	Default value of let is also undefined.
+	Const must require the value during defining.
+	We can redeclare same variable with var in any scope. We can't redeclare variable with let and const, Gives  SyntaxError "Already assigned or declared error".
+What is "temporal dead zone"
+	When accessing assigned variable with let and const gives error and known ad "TDZ".
+Explain data types in javascript 
+	Have two types primitive and non-primitive types. Non-primitive also known as reference types.
+	Primitive types : number, string, boolean, null, undefined
+	Non primitive types : Objects (Array and functions are objects in javascript)
+What is Lexical scoping
+	Inner functions have access to the variables of outer scopes. Using them is known as Lexical scoping.
+What is closures 
+	A closure is the combination of a function and the lexical environment within which that function was declared. 
+	A closure can be defined as a JavaScript feature in which the inner function has access to the outer function variable.
+	Ex: 
+		function createPerson() {
+			let name;
+ 
+			return {
+				getName() {
+					return name;
+				},
+				setName(newName) {
+					name = newName;
+				}
+			};
+		}
+ 
+		const person = createPerson();
+		console.log(person.getName()); // Should initially print: undefined
+		person.setName('Charlie');
+		console.log(person.getName()); // Should print: "Charlie"
