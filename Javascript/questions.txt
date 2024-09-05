@@ -1,4 +1,6 @@
 What is Javascript ? 
 What is callback function ?
 What is different between statments and expressions ?
+- Expressions are lines of code that returns the value or becomes value. Ex: x + 1 is expression.
+- While containing function method with some side effect we call them statments, statments can be collection of multiple expressions.
 what is diff between let, var and const ?

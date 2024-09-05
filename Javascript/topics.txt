@@ -1,0 +1,44 @@
+Core Concepts & Variables
+    Variables (var, let, const)
+    Data types (primitives vs. reference types)
+    Scope and closures and hoisting 
+    Execution Context
+        Global vs. function execution context and the creation phase
+
+Functions & Asynchronous JS
+    Function types (declarations, expressions, arrow functions)
+    Higher-Order Functions
+    Promises and async/await
+
+Event Loop & Prototypes
+    Understanding the call stack, event loop, microtasks, macrotasks
+    Prototypes and inheritance
+
+Arrays
+    Common array methods
+
+Strings
+    Common string methods
+
+Objects 
+    Object creation, manipulation, and destructuring
+
+JavaScript in the Browser
+    Web APIs
+
+Security in JavaScript
+    Common Vulnerabilities
+        Understanding XSS, CSRF, and best practices to mitigate them.
+
+Advanced JavaScript & ES6+ Features
+    ES6+ features (spread operator, destructuring, template literals)
+    Symbols, iterators, and generators
+
+DOM Manipulation & Event Handling
+    Selecting/modifying DOM elements
+    Event handling (bubbling, delegation)
+
+Performance & Debugging
+    Performance optimization (debouncing, throttling)
+    Memory management and garbage collection
+    Debugging techniques

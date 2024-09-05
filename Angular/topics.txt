@@ -1,0 +1,92 @@
+Notes : FOCUS ON IN_DEPTH UNDERSTANDING
+Links
+	Angular.dev / Angular.io
+	Tektutorialshub.com
+	blog.angular-university.io
+Angular Life Cycle
+Types Of lazy Loading
+Templates
+	Property Binding
+	String Interpolation
+	Event Binding
+	Two Way Binding
+	Control Flow
+	Local @let variable
+	NgTemplate
+	NgModel
+Pipes
+	Custom Pipes
+	Pure and Impure Pipes
+	Built-in Pipes
+Components
+	Standalone Components
+	Component Communication
+	Content-Projection
+	DOM Manipulation - Element Reference and Renderer
+	Dynamically Rendering Components
+	ChangeDetectionStrategy
+	ViewEncapsulation
+	ChangeDetector
+Directives
+	Component Directives
+	Attribute Directives
+	Structural Directives
+	Custom Directives
+Dependency Injection And Services
+	Basic Dependency Injection
+	Injectable Services
+	ProvidedIn Of Services and its options
+	Ways to inject Services 
+	Singelton Services
+	Tree-Shakable Services
+	ViewProviders
+	Providers: UseClass, UserExisting, UseFactory
+Signals
+	InputSignals
+	Output Signals
+	Model Inputs
+	Computed Signals
+	Signal Effects
+Routing
+	Path-Match
+	404 Page / WildCard
+	Accessing Query Params and Fragments
+	Lazy loading
+	Guards
+		Auth Guards and its relatives
+		CanActivate
+		CanActivateChild
+		CandDeactivate
+		Resolve
+	Router Reference
+Forms
+	Template Driven 
+	Reactive 
+	Custom Validator in Both Types of Forms
+HTTP Client
+	Get/Post/Patch Call With Possible Options
+	Interceptors
+Deferrable Views
+	Possible Options
+Angular Decoraters
+Angular Modules
+Angular Universal
+	Server Side Rendering
+	Hydration
+Types Of Builds
+Angular CLI
+Observables
+Subscriptions
+Rxjs 
+	Most Used Operators
+Handaling Errors
+	Creating Global Error Handler
+Migrating/Upgrading From Older Versions
+Multiple Apps in One Angular Project
+SEO 
+	Title/Meta from platform Browser
+	Dynamic Title via routes
+Testing
+	Writing tests
+Building And Hosting Project
+Create Project On Angular Material
