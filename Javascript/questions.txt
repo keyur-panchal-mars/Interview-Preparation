@@ -17,6 +17,8 @@ What is hoisting in javascript ?
 - Remember, variables are hoisted but only to the top of the scope they were declared in.
 
 What is diff between let var and const.
+- Var is functional scope else window/ global means if no function then it will be global.
+- Let and const are blocn scope. Means in {}
 - Let and var both hoisted. 
 - We can use var before defining. It will give undefined. 	
 - We can not use let and const before defining. Will give error of "initalization".
