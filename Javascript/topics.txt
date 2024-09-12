@@ -24,6 +24,7 @@ Strings
 
 Objects 
     Object creation, manipulation, and destructuring
+    call apply and bind 
 
 JavaScript in the Browser
     Web APIs
