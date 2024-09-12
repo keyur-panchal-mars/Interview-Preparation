@@ -14,6 +14,8 @@ Event Loop & Prototypes
     Understanding the call stack, event loop, microtasks, macrotasks
     Prototypes and inheritance
 
+Maps and Sets
+
 Arrays
     Common array methods
 
