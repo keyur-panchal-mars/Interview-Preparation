@@ -1,0 +1,116 @@
+ string checking is case sensitive.
+ === and ==, compare strings case-sensitively.
+
+const strPrim = "foo"; // A literal is a string primitive
+const strPrim2 = String(1); // Coerced into the string primitive "1"
+const strPrim3 = String(true); // Coerced into the string primitive "true"
+const strObj = new String(strPrim); // String with new returns a string wrapper object.
+
+Essential String Methods
+1. length
+   Retrieves the length of the string.
+    const str = "Hello, World!";
+    console.log(str.length); // 13
+    
+2. charAt(index)
+    Returns the character at the specified index.
+    const str = "JavaScript";
+    console.log(str.charAt(4)); // 'S'
+    
+3. indexOf(substring) & lastIndexOf(substring)
+    Finds the position of the first/last occurrence of the substring.
+    const str = "JavaScript is awesome!";
+    console.log(str.indexOf('a')); // 1
+    console.log(str.lastIndexOf('a')); // 15
+
+4. includes(substring)
+    Checks if the string contains the given substring.
+    const str = "JavaScript is fun!";
+    console.log(str.includes("fun")); // true
+    
+5. substring(start, end)
+    Extracts a portion of the string between start and end (exclusive).
+    const str = "JavaScript";
+    console.log(str.substring(4, 10)); // 'Script'
+
+6.  slice(start, end)
+    Similar to substring, but allows negative indexing.
+    const str = "JavaScript";
+    console.log(str.slice(-6, -1)); // 'Scrip'
+
+7. split(separator)
+    Splits a string into an array based on the specified separator.
+    const str = "apple,banana,orange";
+    const fruits = str.split(',');
+    console.log(fruits); // ['apple', 'banana', 'orange']
+
+8. replace(searchValue, newValue)
+    Replaces the first occurrence of a substring with a new value.
+    const str = "Hello World!";
+    console.log(str.replace('World', 'Everyone')); // 'Hello Everyone!'
+    replaceAll(searchValue, newValue)
+
+9. Replaces all occurrences of a substring with a new value.
+    const str = "apple, apple, apple";
+    console.log(str.replaceAll('apple', 'orange')); // 'orange, orange, orange'
+
+10. toUpperCase() & toLowerCase()
+    Converts the string to uppercase/lowercase.
+    const str = "Hello!";
+    console.log(str.toUpperCase()); // 'HELLO!'
+    console.log(str.toLowerCase()); // 'hello!'
+
+11. trim()
+    Removes whitespace from both ends of the string.
+    const str = "  Hello World!  ";
+    console.log(str.trim()); // 'Hello World!'
+
+12. repeat(count)
+    Repeats the string count number of times.
+    const str = "abc";
+    console.log(str.repeat(3)); // 'abcabcabc'
+
+14. startsWith(substring) & endsWith(substring)
+    Checks if the string starts or ends with the given substring.
+    const str = "JavaScript";
+    console.log(str.startsWith('Java')); // true
+    console.log(str.endsWith('Script')); // true
+
+15. match(regex)
+    Retrieves the matches of a string against a regular expression.
+    const str = "The rain in Spain";
+    console.log(str.match(/ain/g)); // ['ain', 'ain']
+
+16. search(regex)
+    Searches for a match using a regular expression and returns the index of the first match.
+    const str = "The rain in Spain";
+    console.log(str.search(/ain/)); // 5
+
+17. concat(...strings)
+    Concatenates the specified strings to the current string.
+    const str1 = "Hello";
+    const str2 = "World";
+    console.log(str1.concat(' ', str2)); // 'Hello World'
+
+18. padStart(targetLength, padString)
+    Pads the string at the beginning until it reaches the desired length.
+    const str = "42";
+    conole.log(str.padStart(5, '0')); // '00042'
+
+19. padEnd(targetLength, padString)
+    Pads the string at the end until it reaches the desired length.
+    const str = "42";
+    console.log(str.padEnd(5, '*')); // '42***'
+
+20. Reverse a String
+    Reverses the characters of a string (using split(), reverse(), and join()). 
+    const str = "hello";
+    console.log(str.split('').reverse().join('')); // 'olleh'
+
+21. join(separator)
+    Usage: Combines all elements of an array into a single string, with an optional separator between the elements.
+    const arr = ['H', 'e', 'l', 'l', 'o'];
+    console.log(arr.join('')); // 'Hello'
+    Note: If no separator is specified, join() defaults to separating elements with a comma:
+    const arr = [1, 2, 3];
+    console.log(arr.join()); // '1,2,3'
