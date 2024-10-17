@@ -1,0 +1,24 @@
+What is nodejs?
+ 
+Node is a runtime environment that allows JavaScript to be executed on the server side.
+ 
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+How nodejs runs code?
+ 
+Node.js is built on an event-driven, non-blocking I/O model, which means it can handle many operations simultaneously without getting bogged down by waiting for any single operation to complete.
+Nodejs runs on event driven architecture. it doesn’t wait for that operation to finish before moving on. Instead, it registers a callback function to be executed when the operation completes.
+Nodejs also uses the event loop. The event loop handles background tasks using a thread pool for certain operations, such as file I/O, allowing it to handle non-blocking operations efficiently.
+Nodejs Event loop consist of thread pool. if the operation needs blocking i/o it will be used with thread pool that handles the async operation and returns response.
+	Nodejs > event loop > if non i/o run and return response ?? if aysnc then assigns thread from thread pool which handles i/o and returns res.
+ 
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Nodejs thread pool
+ 
+Node.js uses a library called libuv to manage its asynchronous I/O operations. Libuv has a built-in thread pool that handles tasks that can't be executed on the main event loop, such as file system operations and some cryptographic functions.
+By default, the thread pool consists of four threads. This can be adjusted using the UV_THREADPOOL_SIZE environment variable.
+The thread pool is particularly useful for:
+	File system operations (fs module)
+	DNS lookups
+	Some cryptographic functions (like hashing)
+ 
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------

@@ -1,0 +1,137 @@
+Reactive extensions: rxjs
+ 
+Benefits of Using Observables and RxJS
+- Asynchronous Programming: Observables make it easier to work with asynchronous data streams (like HTTP requests, user inputs, etc.).
+- Cancellation: You can easily unsubscribe from observables to prevent memory leaks or unwanted behavior.
+- Operators: RxJS provides a rich set of operators (like map, filter, mergeMap, etc.) to transform and manipulate data streams.
+- Composition: Observables can be combined in powerful ways to create complex data flows and applications.
+ 
+1. Observable
+	An Observable is a core concept in RxJS. It represents a stream of data that can be observed over time. Observables can emit multiple values, which can be of any type (including objects, arrays, etc.).
+	Creation: You can create an Observable using the Observable constructor or various creation operators like of, from, interval, etc.
+	Laziness: Observables are lazy, meaning they do not start emitting values until they are subscribed to.
+2. Observer
+	An Observer is an object that defines how to react to the values emitted by an Observable.
+	next(value): Called when a new value is emitted.
+	error(err): Called if an error occurs during the emission of values.
+	complete(): Called when the Observable completes its emission.
+	we create observer whenever we listen to Observable.
+	To listen we use subscription.
+3. Subscription
+	A Subscription represents the execution of an Observable. When you subscribe to an Observable, you provide it with an Observer.
+	const subscription = observable.subscribe(observer);
+
+-----------------------------------------------------------------------------------------------------------------
+Rxjs Operators:
+ 
+- Chaining Operators
+ 
+1. pipe()
+- The pipe operator enables us to execute different RxJS operators one after the other in order to get our fruits as we need them.
+    Ex: observable.pipe( other chain of operators ).subscribe();
+ 
+- Combination Operators
+ 
+1. merge
+- Combine multiple Observables into a single Observable. It subscribes to each provided Observable and emits their values as they arrive, in a non-blocking manner
+	Ex: merge(of(1,2),of(2,3)).pipe(other chaining too).subscribe(val => console.log(val)); //1,2,3,4
+2. zip
+- Combine multiple Observables into a single Observable that emits arrays containing the latest values from each of the input Observables
+	Ex: zip(of(1,3),of(2,4)).subscribe(val=>console.log(val)); //[1,2],[3,4]
+3. combineLatest
+ 
+- Creation Operators
+ 
+1. of
+2. from
+3. fromEvent()
+- Turn event into observable sequence
+	Ex:	const source = fromEvent(document, 'click');
+		//map to string with given event timestamp
+		const example = source.pipe(map(event => `Event time: ${event.timeStamp}`));
+4. interval
+ 
+- Error handaling Operators
+ 
+1. catchError
+2. retry
+ 
+- Multi casting Operators
+
+1. share
+2. shareReplay()
+- Allows you to share a single subscription to an Observable among multiple subscribers while replaying the last emitted values.
+- Replay Emissions: It replays the specified number of emissions to new subscribers, which can be useful in scenarios where the latest data is needed immediately.
+- Avoids Redundant Work: Since the original Observable is only subscribed to once, it avoids unnecessary executions, especially if the Observable performs expensive operations.
+	Ex: of(1,2,3).pipe(delay(1000),shareReplay(1)); 
+		obs1.subscribe() // outputs: 1,2,3
+		setTimeout(()=>{ obs1.subscribe() // outputs: 3 },2000)
+ 
+- Filtering Operators
+
+1. distinct()
+- The distinct operator in RxJS is used to filter out duplicate values emitted by an Observable.
+- The comparison is based on strict equality (===), which means that both the value and type must match.
+	Ex: const source = of(1,1,3,4,3,2,2);
+		source.pipe(distinct()).subscribe(val => {console.log(val)}); // 1,3,4,2
+2. distinctUntilChanged()
+- filter out consecutive duplicate values emitted by an Observable. It ensures that subscribers only receive distinct values if they are different from the last emitted value.
+- Think about a search bar on a website. As users type their queries, you don't want to send a server request for the same input value multiple times in a row, it would be redundant and inefficient.
+- Here’s where distinctUntilChanged combined with debounceTime could shine.
+3. take()
+- When you are interested in only the first emission, you want to use take. 
+- Emission Limit: When you apply the take operator to an Observable, it emits the specified number of values and then automatically completes the Observable.
+	Ex: source.pipe(take(1)).subscribe(val => { cosole.log(val) }); // completes after first/one emittion.
+4. takeUntil
+5. takeLast()
+- takes last emitted values only.
+	Ex: of(1,2,3).pipe(takeLast(1)).subscribe(val => console.log(val)); //3
+6. debounceTime
+7. throttleTime
+8. filter()
+- filter whatever the value you want. 
+- filter will only emit values that meet the specified condition. If no values in the observable satisfy the condition, nothing gets emitted.
+9. skip()
+- The skip operator enables us to skip emitted values based on passed times.
+	Ex: source.pipe(skip(2)).subscribe(val => { cosole.log(val) }); // skips first wso emits.
+10. skipLast(2)
+- skips last emitted values only.
+	Ex: of(1,2,3).pipe(skipLast(1)).subscribe(val => console.log(val)); //1,2
+ 
+Transformation Operators 
+ 
+1. map
+- Allows you to transform the values emitted by an Observable. This operator is similar to the array map method.
+	Ex: of(1,2,3).pipe(map(val => val * 2)).subscribe(val => console.log(val)); //1,4,6
+2. pluck
+3. mergeMap 	
+4. concatMap
+- project each value emitted by an Observable into a new Observable and then merge the resulting Observables sequentially. This means that concatMap subscribes to each inner Observable in the order they are emitted and waits for each inner Observable to complete before moving on to the next.
+- Key Features of concatMap
+    - 	Sequential Emission: It ensures that the emissions from the inner Observables are sequential and respect the order of the original emissions.
+    - 	Waiting for Completion: It waits for each inner Observable to complete before subscribing to the next one.
+    - 	Flattening Observables: It flattens the emissions from the inner Observables into a single Observable stream.
+	Ex: 
+	of('Apple', 'Banana', 'Cherry').pipe(
+		concatMap(fruit => {
+			// Create an inner Observable for each fruit
+			return of(`${fruit} is ready`).pipe(delay(1000)); // Delay to simulate async operation
+		})
+		).subscribe(result => {
+			console.log(result);
+	});
+5. switchMap
+ 
+Utility Operators
+
+1. repeat()
+- repeats the observable 
+	Ex: of(1).pipe(repeat(5),delay(1000)).subscribe(val=>console.log(val)); // 1,1,1,1,1 each with 1 sec of delay	
+2. tap
+3. finalize
+4. delay
+ 
+-----------------------------------------------------------------------------------------------------------------
+Subjects:
+ 
+ 

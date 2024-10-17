@@ -1,0 +1,16 @@
+To add PWA support in angular application
+ 
+1. ng add @angular/pwa
+	Adds the pwa package.
+	Adds "manifest.webmanifest" file for appearance related things (name, background color etc).
+	Adds The service worker file ngsw-config.json customized for caching strategies, data handling. But work mostly done with default configs.
+	In app.config will add provideServiceWorker
+2. build application
+	ng build --production
+3. Test the PWA
+	To test in local Install http-server
+4. Test build with http server, goto dist/your_project and run http-server
+	There will be also option to install the application 
+	Check with offline mode in network refresh both pwa build and local
+	Local will not work but the pwa will work
+5. If directly not works try with path/index.html which will work
