@@ -39,26 +39,75 @@ Rxjs Operators:
 - Combine multiple Observables into a single Observable that emits arrays containing the latest values from each of the input Observables
 	Ex: zip(of(1,3),of(2,4)).subscribe(val=>console.log(val)); //[1,2],[3,4]
 3. combineLatest
+	When any observable emits a value, emit the last emitted value from each.
+	This operator is best used when you have multiple, long-lived observables that rely on each other for some calculation or determination.
+	Initial Emission: combineLatest waits until each of the provided observables has emitted at least one value before emitting its own first value.
+	Subsequent Emissions: Whenever any of the input observables emit a new value, combineLatest will emit a new array containing the latest values from all observables.
+	Unsubscription: If any observable completes, combineLatest will complete as well.
+	Ex: source1 = of("hello").pipe(delay(1000));
+		source2 = of("world").pipe(delay(2000));
+		combineLatest([source1,source2]).subscribe(([value1, value2]) => {
+		  console.log(`Combined values: ${value1} ${value2}`); // logs "hello world"after two secs
+		});
  
 - Creation Operators
  
 1. of
+	Emit variable amount of values in a sequence and then emits a complete notification.
+	Ex: source = of(1,2,3)
 2. from
+	Turn an array, promise, or iterable into an observable.
+	For arrays and iterables, it emits each item one at a time in order. For promises, it emits the resolved value.
+	Ex: source = from([1,2,3])
 3. fromEvent()
 - Turn event into observable sequence
 	Ex:	const source = fromEvent(document, 'click');
 		//map to string with given event timestamp
 		const example = source.pipe(map(event => `Event time: ${event.timeStamp}`));
 4. interval
+	Emit numbers in sequence based on provided timeframe.
+	Ex: const source = interval(1000);
+5. timer
+	After given duration, emit numbers in sequence every specified duration.
+	Ex: 
+		//emit 0 after 1 second then complete, since no second argument is supplied
+		const source = timer(1000);
+	Ex2: 
+		// emit 0 after 1 second then continue next values after 2 seconds each continuesss until unsubscribed
+		const source = timer(1000, 2000);
  
 - Error handaling Operators
  
 1. catchError
+	Catched the observable error
 2. retry
+	Retry an observable sequence a specific number of times should an error occur.
+	Ex:  return this.http.get(this.apiUrl).pipe(
+		  retry(3), // Retry the request up to 3 times on error
+		  catchError(this.handleError) // Handle errors appropriately
+		);
+3. retryWhen
+	Retry an observable sequence on error based on custom criteria.
+	When there is error in observable it will come to retryWhen checks come conditions.
+	Ex: const source = throwError('This is an error!').pipe(
+    retryWhen(errors => 
+		  errors.pipe(
+			tap(() => console.log('Retrying...')),
+			scan((retryCount) => retryCount + 1, 0), // Count the retries
+			delay(2000), // Wait for 2 seconds before retrying
+			takeWhile(retryCount => retryCount < 2) // Limit to 2 retries
+		  )
+		)
+	);
  
 - Multi casting Operators
 
 1. share
+	Allows an observable to be shared among multiple subscribers.
+	Gives last emitted value to the new subscriber.
+	Ex:	of(1,2,3).pipe(tap(()=>{console.log("tap")}),delay(1000),share()); 
+		obs1.subscribe() // outputs: 1,2,3 and tap
+		setTimeout(()=>{ obs1.subscribe() // outputs: 3 },2000); // outputs 1,2,3 without tap
 2. shareReplay()
 - Allows you to share a single subscription to an Observable among multiple subscribers while replaying the last emitted values.
 - Replay Emissions: It replays the specified number of emissions to new subscribers, which can be useful in scenarios where the latest data is needed immediately.
@@ -83,11 +132,27 @@ Rxjs Operators:
 - Emission Limit: When you apply the take operator to an Observable, it emits the specified number of values and then automatically completes the Observable.
 	Ex: source.pipe(take(1)).subscribe(val => { cosole.log(val) }); // completes after first/one emittion.
 4. takeUntil
+- emit values from the source Observable until a specified notifier Observable emits its first value.
+- basically takeUntil expects observable emitter and whenver that observable emits finish outer observable.
+	Ex: of(1,2,3).pipe(takeUntil(2)).subscribe(val => console.log(val));
 5. takeLast()
 - takes last emitted values only.
 	Ex: of(1,2,3).pipe(takeLast(1)).subscribe(val => console.log(val)); //3
 6. debounceTime
+- delay the emission of values from an Observable based on a specified time interval.
+- It waits for a period of inactivity before emitting the latest value from the source Observable
+	Ex: const search$ = fromEvent(searchInput, 'keyup').pipe(
+			map((event: any) => event.target.value), // Extract the input value
+			debounceTime(500) // Wait 500ms after the user stops typing
+		);
 7. throttleTime
+- limit the rate at which values are emitted by an Observable
+- Emits the first value immediately and then ignores all other values for the specified duration.
+- Once the duration ends, it emits the next value and repeats the process.	
+	Ex: // Create an Observable for button clicks
+		const clicks$ = fromEvent(button, 'click').pipe(
+			throttleTime(1000) // Allow one click event per second
+		);
 8. filter()
 - filter whatever the value you want. 
 - filter will only emit values that meet the specified condition. If no values in the observable satisfy the condition, nothing gets emitted.
@@ -104,8 +169,16 @@ Transformation Operators
 - Allows you to transform the values emitted by an Observable. This operator is similar to the array map method.
 	Ex: of(1,2,3).pipe(map(val => val * 2)).subscribe(val => console.log(val)); //1,4,6
 2. pluck
-3. mergeMap 	
-4. concatMap
+	Extract a specific property from emitted objects in an observable stream.
+	Ex: of({name:"s",id:1},{name:"cg",id:4},{name:"ede",id:2}).pipe(pluck('name')).subscribe(val => console.log(name)); // logs "s","cg","ede"
+3. bufferTime
+	Collect emitted values until provided time has passed, emit as array.
+	Ex: interval(500).pipe(bufferTime(2000)).subscribe(); //every 2 sec[0,1,2,3], [4,5,,6,7]
+4. mergeMap
+	Allows you to take each emitted value from an observable and map it to a new observable
+	Flattening Observables: When you have an observable that emits values and each emitted value needs to trigger another observable.	
+	Completes each emition	
+5. concatMap
 - project each value emitted by an Observable into a new Observable and then merge the resulting Observables sequentially. This means that concatMap subscribes to each inner Observable in the order they are emitted and waits for each inner Observable to complete before moving on to the next.
 - Key Features of concatMap
     - 	Sequential Emission: It ensures that the emissions from the inner Observables are sequential and respect the order of the original emissions.
@@ -120,18 +193,44 @@ Transformation Operators
 		).subscribe(result => {
 			console.log(result);
 	});
-5. switchMap
+6. concatMap
+	project each value emitted by an Observable into a new Observable and then merge the resulting Observables sequentially. This means that concatMap subscribes to each inner Observable in the order they are emitted and waits for each inner Observable to complete before moving on to the next.
+	Key Features of concatMap
+		Sequential Emission: It ensures that the emissions from the inner Observables are sequential and respect the order of the original emissions.
+		Waiting for Completion: It waits for each inner Observable to complete before subscribing to the next one.
+		Flattening Observables: It flattens the emissions from the inner Observables into a single Observable stream.
+	Ex: 
+	of('Apple', 'Banana', 'Cherry').pipe(
+		concatMap(fruit => {
+			// Create an inner Observable for each fruit
+			return of(`${fruit} is ready`).pipe(delay(1000)); // Delay to simulate async operation
+		})
+		).subscribe(result => {
+			console.log(result);
+	});
+7. switchMap
+	Maps each value emitted by an observable into a new observable, but it does so with a unique behavior: it will unsubscribe from the previous inner observable whenever a new value is emitted.
+	switchMap maintains only one inner subscription at a time.
+	Ex: fromEvent(document, 'click').pipe(
+		// restarts counter on every click
+        switchMap(() => interval(1000))
+      )
+      .subscribe(console.log);
  
 Utility Operators
 
 1. repeat()
-- repeats the observable 
-	Ex: of(1).pipe(repeat(5),delay(1000)).subscribe(val=>console.log(val)); // 1,1,1,1,1 each with 1 sec of delay	
+	repeats the observable 
+	of(1).pipe(repeat(5),delay(1000)).subscribe(val=>console.log(val)); // 1,1,1,1,1 each with 1 sec of delay	
 2. tap
+	Transparently perform actions or side-effects, such as logging.
+	Ex: tap(val => console.log(`BEFORE MAP: ${val}`))
 3. finalize
+	Call a function when observable completes or errors
+	finalize(()=>{})
 4. delay
- 
------------------------------------------------------------------------------------------------------------------
-Subjects:
+	Delay emitted values by given time.
+	Ex: of(1,2,3).pipe(delay(2000)).subscribe() // gets 1,2,3after 2 secs
+
  
  

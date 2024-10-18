@@ -1,0 +1,125 @@
+Signals
+ 
+- Signal is a reactive primitive that represents a value and that allows us to change that same value in a controlled way and track its changes over time.
+- Signals are all about increasing the runtime performance of your application, by getting rid of Zone.js.
+- Signals are also way easier to use and understand than RxJS when it comes to propagating data changes throughout an application.
+- Signals are a game changer, and they take reactivity in Angular to a whole new level!
+- The advantage is that with signals, we can easily detect when any part of the application data changes, and update any dependencies automatically.
+- There would no longer be the need to check the whole component tree, like in the case of default change detection!
+- Signals are functions.
+- You must pass initial value.
+    Ex: counter = signal(0);
+ Tget value of signal write as function.//html {{counter()}}
+ How to modify the value of a signal?
+ 	set() as long as the value is of the same type as the initial value of the signal.
+ 		Ex: this.counter.set(1);
+ 	update()  update API takes a function that receives the current value of the signal as an input argument.
+ 		Ex: this.counter.update(val => val + 1);
+ With using signal, We can get notified when signal value changes.
+ Signals can be created and derived from other signals. When a signal updates, all its dependent signals will then get updated automatically.
+ 
+-----------------------------------------------------------------------------------------------------------------
+
+Computed Signals
+- The computed API works by taking in one or more source signals, and creating a new signal.
+	Ex: newSignal = computed(()=>{ return this.counter() * 10 })
+	Now whenever the counter source signal has a new value, the derived signal also gets updated automatically.
+	No need to subscribe.
+	computedSignals are read-only signals.
+
+-----------------------------------------------------------------------------------------------------------------
+ 
+untracked api
+- When to use: When you don't want any dependency between signals use untracked api and yet want to use signals with other signal.
+	Ex: derivedCounter = computed(() => {        return untracked(this.counter) * 10;    })
+	If you find yourself using this feature very often, something is not right.
+
+-----------------------------------------------------------------------------------------------------------------
+ 
+Signals with array and object values
+- we can create using signal([1,2,3]) or signal({name:"id",id;1})
+- But to manipulate we do it with set or update Signal's API.
+- Avoid signal().push('data') or signal().name="s";
+
+-----------------------------------------------------------------------------------------------------------------
+ 
+Detecting signal changes with the effect() API
+- Used when tou want to detect that the value of a signal (or a set of signals) has changed to perform some sort of side effect, that does not modify other signals.
+- use in constructor(){
+		effect(() => {
+		  const currentCount = this.counter();
+		  const derivedCount = this.derivedCounter();
+
+		  console.log(`Current values: ${currentCount}, Derived Counter: ${derivedCount}`);
+		});
+	}
+ 
+- By default, Angular does not allow a signal value to be changed from inside an effect function.
+    Ex: effect(()=>{ this.counter.set(1) })
+    Output: Writing to signals is not allowed in a computed or an effect by default
+    Solution: effect(()=>{ this.counter.set(1) },{allowSignalWrites: true})
+    //Use very carefully
+
+- Destroy of effect is required, angular does automatically for manually:
+    const effectRef = effect(()=>{ })
+    effectRef.destroy();
+
+- onCleanup of effects
+    When you want to do some cleanup on effects
+    effect((onCleanup)=>{ 
+        onCleanup(() => {
+        console.log("Perform cleanup action here");
+        });
+    })
+
+-----------------------------------------------------------------------------------------------------------------
+ 
+Read-only signals
+- You can do like this to create read-only signals this.counter.asReadonly();
+
+-----------------------------------------------------------------------------------------------------------------
+ 
+How to create signal-based reactive data services
+- Do not create and make public signal instead uses public and private and common approach.
+	//signal.service.ts
+	private counter = signal(0);
+ 
+	readOnly couterReadOnly = counter.asReadOnly();
+ 
+	increment(){
+		this.counter().update(val => val + 1)
+	}
+
+-----------------------------------------------------------------------------------------------------------------
+ 
+input as a signal
+	Ex: inputData = input();
+	required: inputData = input.required<string>('');
+	alias: inputData = input.required<string>('',{alias:'useThisName'});
+    usage: // child
+               inputData = input(0);
+           // parent    
+                <app-child [inputData]="dataFromParent" />
+
+output as a signal
+    Ex: deleteBook = output()
+    usage: this.deleteBook.emit({})
+           <book (deleteBook)="deleteBookEvent($event)" />
+    alias: deleteBook = output({alias: "deleteBookOutput"});
+
+
+model inputs for two way data binding
+- you can use it as parent to child and vice versa also two way data bindings as well.
+	//app-model-component
+		modelInput = model(false);
+	//parent component using model
+	<app-model-component   [modelInput]="isAdmin">
+	// value must be signal
+	protected isAdmin = signal(false);
+ 
+	Implicit change events
+		//app-model-component
+		modelInput = model(false);
+		whatever the name of model append 'Change' so here modelInputChange()
+		Ex: <app-model-component  [modelInput]="isAdmin" (modelInputChange)="handleInParent($event)">
+            whenever child changes it emits to the parent

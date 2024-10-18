@@ -1,5 +1,5 @@
 What is Javascript ? 
--Javascript is a scripting language for the web. scripting language talks with other programming language.
+- Javascript is a scripting language for the web. scripting language talks with other programming language.
 
 -----------------------------------------------------------------------------------------------------------------
 
