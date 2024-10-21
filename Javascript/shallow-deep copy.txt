@@ -1,0 +1,100 @@
+Shallow and deep copy
+ 
+- A deep copy means that all of the values of the new variable are copied and disconnected from the original variable. Changes to the copied object or array do not affect the original.
+- A shallow copy means that certain (sub-)values are still connected to the original variable. Changes to nested objects in the copied structure will reflect in the original.
+ 
+Primitive data types
+- When you create these values, they are tightly coupled with the variable they are assigned to. They only exist once.
+- When you make a copy, it will be a real copy no shallow or deep.
+ 
+Composite data types
+
+- Objects
+	- These values are actually stored just once when instantiated, and assigning a variable just creates a pointer (reference) to that value.
+	So Ex shallow copy: 
+		const a = {
+		  en: 'Hello',
+		  de: 'Hallo',
+		  es: 'Hola',
+		  pt: 'Olà'
+		}
+ 
+		let b = a
+		b.pt = 'Oi'
+ 
+		console.log(b.pt) // Oi
+		console.log(a.pt) // Oi
+ 
+	- Solution Spread operator
+		So Ex deep copy: 
+			const a = {
+			  en: 'Bye',
+			  de: 'Tschüss'
+			}
+ 
+			let b = {...a}
+			b.de = 'Ciao'
+ 
+			console.log(b.de) // Ciao
+			console.log(a.de) // Tschüss
+		So Ex depp copy:
+			const a = { name: "abc" };
+			const b = { id: "ac3T" };
+			const c = { ...a, ...b };
+ 
+			c.name = "updated";
+ 
+			console.log(c.name) // updated
+			console.log(a.name) // abc
+ 
+	- Object.assign
+		- Before spread operator this was used.
+		- You have to be careful though, as the first argument in the Object.assign() method actually gets modified and returned. So make sure that you pass the object to copy at least as the second argument. 
+		Ex: 
+			const a = {
+			  en: 'Bye',
+			  de: 'Tschüss'
+			}
+ 
+			let b = Object.assign({}, a)
+			b.de = 'Ciao'
+ 
+			console.log(b.de) // Ciao
+			console.log(a.de) // Tschüss
+ 
+	- To make a deep copy of nested objects:
+		const a = {
+		  foods: {
+			dinner: 'Pasta'
+		  }
+		}
+ 
+		let b = {foods: {...a.foods}}
+		b.foods.dinner = 'Soup'
+ 
+		console.log(b.foods.dinner) // Soup
+		console.log(a.foods.dinner) // Pasta
+ 
+	- Making deep copies without thinking with JSON.stringify
+		- You simply stringify your object and parse it right after:
+			const a = {
+			  foods: {
+				dinner: 'Pasta'
+			  }
+			}
+			let b = JSON.parse(JSON.stringify(a))
+			b.foods.dinner = 'Soup'
+			console.log(b.foods.dinner) // Soup
+			console.log(a.foods.dinner) // Pasta		
+ 
+- Arrays
+	- Spread Operator
+		As with objects, you can use the spread operator to copy an array:
+			const a = [1,2,3]
+			let b = [...a]
+			b[1] = 4
+ 
+			console.log(b[1]) // 4
+			console.log(a[1]) // 2
+	- Nested arrays
+		Similar to objects, using the methods above to copy an array with another array or object inside will generate a shallow copy. To prevent that, also use JSON.parse(JSON.stringify(someArray)).

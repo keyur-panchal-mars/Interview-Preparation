@@ -157,9 +157,15 @@ What is Web APIs?
 	The Web APIs are provided by the web browser that gives additional functionality to the V8 engine/Javascript engine.
  
 What is event Loop
-	The Event Loop has only one simple job to do. It looks at the Call Stack and Callback Queue, if the Call Stack is empty, it pushes the first callback function of the Callback Queue to the Call Stack..
+	There’s an endless loop, where the JavaScript engine waits for tasks, executes them and then sleeps, waiting for more tasks.
+	The Event Loop has only one simple job to do. It looks at the Call Stack and Callback Queue, if the Call Stack is empty, it pushes the first callback function of the Callback
+	The general algorithm of the engine:
+		1. While there are tasks:
+			execute them, starting with the oldest task.
+		2. Sleep until a task appears, then go to 1.
+	Queue to the Call Stack..
 	Whenever the Call Stack is empty, the JS execution environment occasionally checks to see if anything is Queued in the Event Loop. If it is, the first item is moved to the Call Stack for execution.
- 
+
 What is starved Event Loop	
 	When "Event Loop" has to wait for call stack to be empty so event loop's process to be pushed into call stack. 
  
@@ -168,7 +174,7 @@ Queue
 	There are two main types of task queues in JavaScript: the microtask queue and the macrotask queue.
 	Microtask:
 		The microtask queue, as the name suggests, handles microtasks. Microtasks have higher priority and are executed immediately after the currently executing task, but before the next task is picked up from the event queue. This ensures that microtasks are processed as soon as possible.	
-		Ex: Promises
+		Ex: Promises, await
 	Mactotask:
 		The macrotask queue handles macrotasks, which are executed at a lower priority compared to microtasks. Macrotasks are picked up from the event queue only when there are no microtasks pending execution. This ensures that macrotasks do not block critical operations and keep the application responsive.
 		Ex: setInterval,setTimeout,user interactions
@@ -313,3 +319,38 @@ apply :
 		pokemonName.apply(pokemon,['sushi', 'algorithms']); // Pika Chu  loves sushi and algorithms
 
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+prototype-inheritance
+ 
+- Used when we want to take something and extend it.
+- When we read a property from object, and it’s missing, JavaScript automatically takes it from the prototype.
+- First it checks in own object then prototype.
+Ex: 
+	let animal = {
+	  eats: true
+	};
+	let rabbit = {
+	  jumps: true
+	};
+ 
+	rabbit.__proto__ = animal;
+	alert( rabbit.eats ); // true
+	Here we can say that "animal is the prototype of rabbit" or "rabbit prototypically inherits from animal".
+ 
+There are only two limitations:
+-	The references can’t go in circles. JavaScript will throw an error if we try to assign __proto__ in a circle.
+-	The value of __proto__ can be either an object or null. Other types are ignored.
+- 	Also it may be obvious, but still: there can be only one [[Prototype]]. An object may not inherit from two others.
+ 
+- __proto__ is a historical getter/setter for [[Prototype]]
+
+- Other built-in objects such as Array, Date, Function and others also keep methods in prototypes.
+- For instance, when we create an array [1, 2, 3], the default new Array() constructor is used internally. So Array.prototype becomes its prototype and provides methods. That’s very memory-efficient.
+ 
+Ex: [1,2,3] => Array.prototype => Object.Prototype
+Ex: function(){} => Function.prototype => Object.Prototype
+Ex: 5 => Number.prototype => Object.Prototype
+ 
+- The methods are stored in the prototype (Array.prototype, Object.prototype, Date.prototype, etc.)
+- Primitives also store methods in prototypes of wrapper objects: Number.prototype, String.prototype and Boolean.prototype. 
+- Only undefined and null do not have wrapper objects.
