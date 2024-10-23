@@ -1,0 +1,494 @@
+Links
+	Angular.dev / Angular.io
+	Tektutorialshub.com
+	blog.angular-university.io
+ 
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ 
+Angular latest Updates
+	Angular 17:
+		Built-in control flow:
+			- Added in Template part
+		Deferrable views:
+			- Added in Template part
+		Signals:
+			Added in separate file 
+		Angular material 3 is stable
+ 
+	Angular 18:
+		- Control flow Now stable
+		- Defferable views now stable
+		- Angular.dev is new site for angular
+		- @let = 10 in templates // not used 
+		- Historically, a library called zone.js has been responsible for triggering Angular’s change detection. You can try the experimental zoneless support in Angular.
+		Ex: bootstrapApplication(App, {
+			  providers: [
+				provideExperimentalZonelessChangeDetection()
+			  ]
+			});
+			After adding the provider, remove zone.js from your polyfills in angular.json.
+ 
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ 
+Angular Life Cycle
+ 
+- The life cycle of a component begins when Angular creates the component class. The first method that gets invoked is class Constructor.
+- Constructor is neither a life cycle hook nor is it specific to Angular.  It is a Javascript feature.
+ 
+Execution order: 
+	constructor > ngOnChanges > ngOnInit > ngDoCheck > ngAfterContentInit and ngAfterViewInit > ngAfterContentChecked and ngAfterViewChecked > > afterNextRender afterRender > ngOnDestroy 
+ 
+1. ngOnChanges:
+	- Whenever any Input or Output propery updates angular fires this hook and it returns data in simpleObject.
+	- SimpleChanges consist of { previousValue, currentValue, FirstChange: boolean }
+	Ex: ngOnChanges(changes: SimpleChanges) { console.log(changes) } 
+2. ngOnInit:
+	- This hook is fired only once and immediately after its creation.
+	- Here we can initialize needed configuration or data. Also we can use the ngOnChanges's data too.
+	Ex: ngOnInit() { this.getData(); }
+3. ngDoCheck:
+	- The Angular invokes the ngDoCheck hook event during every change detection cycle. 
+	- This hook is invoked even if there is no change in any of the properties.
+	- We can use to create custom change detection when angular fails to detect the changes.
+	- Angular recommands use only you have no other option.
+4. ngAfterContentInit:
+	- The parent injects the content between the opening & closing element.  Angular passes this content to the child component.
+	- This way we can pass html content and child can have them. Also there is configurations too. to identify and use specific content.
+	Ex: child
+			<h2>Child Component</h2>
+			<ng-content></ng-content>   <!-- placehodler for content from parent -->
+		parent
+			<h1>Parent Component</h1>
+			<app-child> This <b>content</b> is injected from parent</app-child>
+5. ngAfterContentChecked:
+	- ngAfterContentChecked Life cycle hook is called during every change detection cycle after Angular finishes checking of component’s projected content.
+6. ngAfterViewInit:
+	- ngAfterViewInit hook is called after the Component’s View & all its child views are fully initialized.
+	- This hook is called during the first change detection cycle, where angular initializes the view for the first time.
+7. ngAfterViewChecked
+	- The Angular fires this hook after it checks & updates the component’s views and child views.
+8. afterRender
+	- Runs every time all components have been rendered to the DOM.
+	Ex: @ViewChild('content') private _contentRef!: ElementRef;
+		  constructor() {
+			afterRender(() => {
+			  const element = this._contentRef.nativeElement;
+			  console.log(`After render, content position: (${element.offsetLeft}, ${element.offsetTop})`);
+			});
+		  }
+9. afterNextRender	
+	- Runs once the next time that all components have been rendered to the DOM.
+	Ex: constructor(){
+			afterNextRender(() => {
+			  // Focus the first input element in this component.
+			  elementRef.nativeElement.querySelector('input')?.focus();
+			});
+		} 
+10. ngOnDestroy
+	- Calls once when component is being destroyed.
+	- Can reset preoperties, clear data, unsubscribe observables.
+ 
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ 
+Templates
+ 
+	Property Binding
+		Ex: <button [disabled]="isFormValid">Save</button>
+			<section [style.display]="isExpanded ? 'block' : 'none'">
+ 
+	String Interpolation
+		Ex: <p>{{something}}</p>
+	Event Binding:
+		Ex: <input type="text" (keyup)="updateField()" />
+			<input type="text" (click)="fieldClicked()" />
+			<input type="text" (keyup)="updateField($event)" />
+				updateField(event: KeyboardEvent): void {
+				 console.log(`The user pressed: ${event.key}`);
+				}
+	Two Way Binding: 
+		- The syntax for two-way binding is a combination of square brackets and parentheses, [()]. Angular community refers to this syntax as "banana-in-a-box".
+		Ex: import { Component } from '@angular/core';
+			import { FormsModule } from '@angular/forms';
+			@Component({
+			  standalone: true,
+			  imports: [FormsModule],
+			  template: `
+				<main>
+				  <h2>Hello {{ firstName }}!</h2>
+				  <input type="text" [(ngModel)]="firstName" />
+				</main>
+			  `
+			})
+			export class AppComponent {
+			  firstName = 'Ada';
+			}
+ 
+	Built-in control flow: 
+		- Still have to see syntaxes for *ngIf, *ngFor, *ngSwitch
+			- This control flow is around 90% faster than older replacements
+			1. @if(){} @else{}
+			2. @switch (accessLevel) {
+				  @case ('admin') { <admin-dashboard/> }
+				  @case ('moderator') { <moderator-dashboard/> }
+				  @default { <user-dashboard/> }
+				}
+			3.	@for (user of users; track user.id) {
+				  {{ user.name }}
+				} @empty {
+				  Empty list of users
+				}
+	Contextual variables in @for blocks
+		- Inside @for blocks, several implicit variables are always available:
+			Variable	Meaning
+			$count	Number of items in a collection iterated over
+			$index	Index of the current row
+			$first	Whether the current row is the first row
+			$last	Whether the current row is the last row
+			$even	Whether the current row index is even
+			$odd	Whether the current row index is odd
+ 
+		// With aliased name
+		Ex: @for (item of items; track item.id; let idx = $index, e = $even) {
+			  <p>Item #{{ idx }}: {{ item.name }}</p>
+			}
+ 
+	Deffered View blocks:
+		- The new deferrable views, allow you to lazily load the list of comments and all their transitive dependencies with a single line of declarative code:
+		- It have following options: on idle, on interaction, on viewport, when <exp>, on hover
+		Ex:	@defer {
+			  <comment-list />
+			}
+		Ex:	@defer {
+			  <comment-list />
+			} @placeholder { when not comment-list} 
+		Ex: @defer (on viewport) {
+			  <comment-list/>
+			} @loading {
+			  Loading…
+			} @error {
+			  Loading failed :(
+			} @placeholder {
+			  <img src="comments-placeholder.png">
+			}
+ 
+	Local @let variable
+		- Declare a variable in template.
+		- A template reference variable can refer to the following:
+			a DOM element within a template (including custom elements)
+			an Angular component or directive
+			a TemplateRef from an ng-template
+ 
+	NgTemplate
+		Ex: <p>This is a normal element</p>
+			<ng-template #myFragment>
+			  <p>This is a fragment</p>
+			</ng-template>
+			<ng-container [ngTemplateOutlet]="myFragment" />
+ 
+	ViewContainerRef
+		- If you want to insert new component or template, you need to tell Angular where to put this element. And that’s what ViewContainerRef is.
+		Ex: @ViewChild('stepContainer', { read: ViewContainerRef, static: true }) stepContainer!: ViewContainerRef;
+			stepContainer.clear();
+			stepContainer.createComponent(component);
+		Ex: @ViewChild('fragmentOne', {read: TemplateRef}) fragmentOne: TemplateRef<unknown> | undefined;
+ 
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Pipes
+	- Angular template expressions that allows you to transform data.
+	- Pipes let you declare a transformation function once and then use that transformation across multiple templates.
+ 
+	Built-in Pipes
+		- Angular provides several built-in pipes that you can use out of the box. Some of the most commonly used built-in pipes include:
+			DatePipe: Formats dates.
+			CurrencyPipe: Formats numbers as currency.
+			DecimalPipe: Formats numbers as decimal values.
+			PercentPipe: Formats numbers as percentages.
+			SlicePipe: Creates a new array or string containing a subset of the original data.
+			JsonPipe: Converts an object into a JSON string.		
+	Custom Pipes
+		- You can create your own custom pipes in Angular by implementing the PipeTransform interface and using the @Pipe decorator.
+			Ex: import { Pipe, PipeTransform } from '@angular/core';
+				@Pipe({
+				  name: 'exponential'
+				})
+				export class SomethingPipe implements PipeTransform {
+				    transform(value: string, args: number): unknown {
+					console.log(args);
+					if (value.length > args) {
+					  return value.slice(0, args).padEnd(args + 3, '.');
+					} else {
+					  return value;
+					}
+				  }
+				}
+			usage: <h1>Hello from {{ name | something: 5 }}</h1> // Angul...
+ 
+	Pure and Impure Pipes
+		- Pure Pipes: These are the default type. They only re-evaluate when the input reference changes. This is efficient and often recommended for performance.
+		- Impure Pipes: These re-evaluate every time change detection runs, regardless of whether the input reference has changed.
+		Ex: @Pipe({
+			  name: 'impurePipe',
+			  pure: false
+			})
+ 
+	Chaining pipes:
+		Ex: <p>Final Price: {{ price | currency:'USD' | uppercase }}</p>
+		Ex:	<p>Shortened Text: {{ longText | slice:0:20 | uppercase }}</p>		
+ 
+	Asynchronous Pipes:
+		- The AsyncPipe subscribes to an observable or a promise and returns the latest value.
+		- It automatically handles subscriptions and unsubscriptions, making it useful for handling data streams.
+		Ex: <p>Data: {{ data$ | async }}</p>
+ 
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ 
+Components	
+	- Components are the fundamental building blocks of the application.
+	- Consists of three main parts: the template, the class (which defines the behavior), and the styles. 
+	- Each component is a self-contained unit that encapsulates its logic and view, promoting reusability and maintainability.
+ 
+	Standalone Components:
+		- Default in version 17 i have used.
+		- Do not need to be declared in ngModules.
+		- Need component property. (standalone: true)
+ 
+	Component Communication
+		- In Angular, @Input and @Output are decorators used to facilitate communication.
+		- parent to child with @Input: 
+			Ex: @Input() value = 0;
+			Ex:  @Input({required: true}) value = 0;
+			Ex: @Input({alias: 'sliderValue'}) value = 0;
+			Usage: <custom-slider [value]="50" />			
+		- child to parent using @Output:
+			- Define events that a child component can emit to notify its parent component.
+			- It works with an EventEmitter.
+			Ex: @Output() messageEvent = new EventEmitter<string>();
+				sendMessage() {
+					this.messageEvent.emit('Hello from Child!'); // Emit event with data
+				  }
+			Usage: <app-child (messageEvent)="receiveMessage($event)"></app-child>
+					receiveMessage(event: string) {
+						this.message = event; // Update message when event is received
+   				    }
+		- using @ViewChild
+			- Allows a parent component to access a child component’s properties and methods directly.
+			Ex: @ViewChild('childRef') child!: ChildComponent;
+				callChildMethod() {
+					this.child.childMethod(); // Calling a method from ChildComponent
+				}
+ 
+	Content-Projection:
+		- The parent injects the content between the opening & closing element.  Angular passes this content to the child component.
+		- This way we can pass html content and child can have them. Also there is configurations too. to identify and use specific content.
+		Ex: child
+				<h2>Child Component</h2>
+				<ng-content></ng-content>   <!-- placehodler for content from parent -->
+			parent
+				<h1>Parent Component</h1>
+				<app-child> This <b>content</b> is injected from parent</app-child>
+ 
+	@HostBinding and @HostListener:
+		- Used directly in component class. Not in ngOnInit or constructor.
+ 
+		@HostBinding:
+		- The @HostBinding decorator allows you to bind a property of the host element to a property of the directive or component.
+		Ex: // Bind a class to the host element
+			@HostBinding('class.active') isActive = true;
+ 
+		@HostListener:
+		- The @HostListener decorator allows you to listen to events on the host element. 
+		- This is useful for reacting to user interactions like clicks, mouse movements, and other DOM events.
+		Ex:    // Listen for mouseenter events on the host element
+			   @HostListener('mouseenter') onmouseenter() {
+				console.log('Mouse entered the host element!');
+			  }
+ 
+	DOM Manipulation - Element Reference and Renderer
+		- When need DOM manipulation avoid document.getElementById('id').remove() kind of stuff.
+		- Use ElementRef and Renderer2 as angular will get to know the changes.
+		- Always use Renderer2 and ElementRef together as renderer tells angular what changes while elementRef doen't.
+ 
+		ElementRef: 
+			- Creates the dom Element
+			Ex: constructor(elementRef: ElementRef) {
+					console.log(elementRef.nativeElement);
+				  }
+ 
+		Renderer2:
+			- Any DOM elements created by a component's Renderer2 participate in that component's style encapsulation.
+			- It allows developers to interact with the DOM without directly manipulating it.
+			Ex: constructor(private renderer: Renderer2, private el: ElementRef){}
+				changeMethod(){
+						const div = this.el.nativeElement.querySelector('div');
+						// Change the text content using Renderer2
+						this.renderer.setProperty(div, 'textContent', 'Text Changed!');
+				}
+ 
+	Dynamically Rendering Components:
+ 
+		- If you want to insert new component or template, you need to tell Angular where to put this element. And that’s what ViewContainerRef is.
+		Ex: @ViewChild('stepContainer', { read: ViewContainerRef, static: true }) stepContainer!: ViewContainerRef;
+			stepContainer.clear();
+			stepContainer.createComponent(component);
+		Ex: @ViewChild('fragmentOne', {read: TemplateRef}) fragmentOne: TemplateRef<unknown> | undefined;
+ 
+	ChangeDetector:
+		- Change detection can be manually triggered using Angular's ChangeDetectorRef service.
+		1. detectChanges():
+			- Manually checks the component and its children for changes and updates.
+			Ex:  constructor(private cdr: ChangeDetectorRef) {}
+				  changeTitle() {
+					this.title = 'Title Changed';
+					this.cdr.detectChanges(); // Manually trigger change detection
+				  }
+		2. markForCheck():
+			- Marks the component and its ancestors to be checked for changes on the next change detection cycle.
+			Ex:	constructor(private cdr: ChangeDetectorRef) {}
+				  changeTitle() {
+					this.title = 'Title Changed';
+					this.cdr.markForCheck(); // Mark for check
+				  }
+		3. detach() and reattach():
+			- detach(): Detaches the component from the change detection tree. The view will not be updated unless explicitly called.
+			- reattach(): Reattaches the component back to the change detection tree.
+			Ex: constructor(private cdr: ChangeDetectorRef) {}
+				detach() {
+     			  this.cdr.detach();
+     				console.log('Component detached from change detection.');
+     			}     
+     			// Method to reattach the component and manually trigger change detection
+     			reattach() {
+     			  this.cdr.reattach();
+     			  this.cdr.detectChanges(); // Manually trigger change detection
+     			  console.log('Component reattached and change detection triggered.');
+				}
+ 
+	ChangeDetectionStrategy:
+		- The @Component decorator accepts a changeDetection option that controls the component's change detection mode. 
+		- It has two modes :
+			ChangeDetectionStrategy.Default: 
+				- It is default mode, Angular checks whether the component's DOM needs an update whenever any activity occured application-wide.
+			ChangeDetectionStrategy.OnPush: 
+				- Is an optional mode. 
+				- Framework only checks if a component's DOM needs an update when:
+					1. A component input has changes as a result of a binding in a template, or
+					2. An event listener in this component runs or
+					3. The component is explicitly marked for check, via ChangeDetectorRef.markForCheck or something which wraps it, like AsyncPipe.
+ 
+	ViewEncapsulation
+		- View Encapsulation is a mechanism that determines how styles are applied to components.
+		- It has three options:
+			1. Emulated (Default)
+				- This is the default encapsulation mode. 
+				- Angular uses a combination of scoped CSS and attribute selectors to apply styles only to the component’s template.
+				Ex: @component({...encapsulation: ViewEncapsulation.Emulated})
+			2. none
+				- In this mode, Angular does not add any encapsulation to the styles. 
+				- The styles defined in the component are applied globally, affecting all elements that match
+				Ex: @component({...encapsulation: ViewEncapsulation.none})
+			3. Shadow DOM
+				- Uses something Shadow DOM technolog. 
+				- This provides the most encapsulation, but it is not supported in all browsers.
+				Ex: @component({...encapsulation: ViewEncapsulation.ShadowDom})
+ 
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ 
+Forms
+	https://blog.angular-university.io/introduction-to-angular-2-forms-template-driven-vs-model-driven/
+	Template Driven 
+	Reactive 
+	Custom Validator in Both Types of Forms
+ 
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ 
+Directives
+	Component Directives
+	Attribute Directives
+	Structural Directives
+	Custom Directives
+ 
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ 
+Dependency Injection And Services
+	Basic Dependency Injection
+	Injectable Services
+	ProvidedIn Of Services and its options
+	Ways to inject Services 
+	Singelton Services
+	Tree-Shakable Services
+	ViewProviders
+	Providers: UseClass, UserExisting, UseFactory
+ 
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ 
+Routing
+	Path-Match
+	404 Page / WildCard
+	Accessing Query Params and Fragments
+	Lazy loading
+	Router-Outlet vs RouterLink
+	Guards
+		Auth Guards and its relatives
+		CanActivate
+		CanActivateChild
+		CanDeactivate
+		Resolve
+	Router Reference
+	Types Of lazy Loading
+ 
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ 
+HTTP Client
+	Get/Post/Patch Call With Possible Options
+	Interceptors
+ 
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ 
+Angular Decoraters
+ 
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ 
+Angular Modules
+ 
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ 
+Angular CLI
+ 
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ 
+Miscellaneous
+	Creating Global Error Handler
+	Component Architecture: Smart vs. Dumb Components
+	Migrating/Upgrading From Older Versions	
+	Multiple Apps in One Angular Project
+	Angular.json questions
+ 
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ 
+SEO 
+	Title/Meta from platform Browser
+	Dynamic Title via routes
+ 
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ 
+Rxjs => added separate file 
+	Observables
+	Subscriptions 
+	Most Used Operators
+ 
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------	
+Signals => added separate file 
+	InputSignals
+	Output Signals
+	Model Inputs
+	Computed Signals
+	Signal Effects
+ 
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ 
+Angular Universal
+	Server Side Rendering
+	Hydration
+ 
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ 

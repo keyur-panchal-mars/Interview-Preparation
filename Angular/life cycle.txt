@@ -1,0 +1,67 @@
+Angular Life Cycle
+ 
+- The life cycle of a component begins when Angular creates the component class. The first method that gets invoked is class Constructor.
+- Constructor is neither a life cycle hook nor is it specific to Angular.  It is a Javascript feature.
+ 
+Execution order: 
+	constructor > ngOnChanges > ngOnInit > ngDoCheck > ngAfterContentInit and ngAfterViewInit > ngAfterContentChecked and ngAfterViewChecked > > afterNextRender afterRender > ngOnDestroy 
+ 
+1. ngOnChanges:
+	- Whenever any Input or Output propery updates angular fires this hook and it returns data in simpleObject.
+	- SimpleChanges consist of { previousValue, currentValue, FirstChange: boolean }
+	Ex: ngOnChanges(changes: SimpleChanges) { console.log(changes) } 
+
+2. ngOnInit:
+	- This hook is fired only once and immediately after its creation.
+	- Here we can initialize needed configuration or data. Also we can use the ngOnChanges's data too.
+	Ex: ngOnInit() { this.getData(); }
+
+3. ngDoCheck:
+	- The Angular invokes the ngDoCheck hook event during every change detection cycle. 
+	- This hook is invoked even if there is no change in any of the properties.
+	- We can use to create custom change detection when angular fails to detect the changes.
+	- Angular recommands use only you have no other option.
+
+4. ngAfterContentInit:
+	- The parent injects the content between the opening & closing element.  Angular passes this content to the child component.
+	- This way we can pass html content and child can have them. Also there is configurations too. to identify and use specific content.
+	Ex: child
+			<h2>Child Component</h2>
+			<ng-content></ng-content>   <!-- placehodler for content from parent -->
+		parent
+			<h1>Parent Component</h1>
+			<app-child> This <b>content</b> is injected from parent</app-child>
+
+5. ngAfterContentChecked:
+	- ngAfterContentChecked Life cycle hook is called during every change detection cycle after Angular finishes checking of component’s projected content.
+
+6. ngAfterViewInit:
+	- ngAfterViewInit hook is called after the Component’s View & all its child views are fully initialized.
+	- This hook is called during the first change detection cycle, where angular initializes the view for the first time.
+
+7. ngAfterViewChecked
+	- The Angular fires this hook after it checks & updates the component’s views and child views.
+
+8. afterRender
+	- Runs every time all components have been rendered to the DOM.
+	Ex: @ViewChild('content') private _contentRef!: ElementRef;
+		  constructor() {
+			afterRender(() => {
+			  const element = this._contentRef.nativeElement;
+			  console.log(`After render, content position: (${element.offsetLeft}, ${element.offsetTop})`);
+			});
+		  }
+
+9. afterNextRender	
+	- Runs once the next time that all components have been rendered to the DOM.
+	Ex: constructor(){
+			afterNextRender(() => {
+			  // Focus the first input element in this component.
+			  elementRef.nativeElement.querySelector('input')?.focus();
+			});
+		} 
+        
+10. ngOnDestroy
+	- Calls once when component is being destroyed.
+	- Can reset preoperties, clear data, unsubscribe observables.
+ 

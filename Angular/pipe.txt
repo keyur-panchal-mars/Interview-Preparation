@@ -1,0 +1,48 @@
+Pipes
+	- Angular template expressions that allows you to transform data.
+	- Pipes let you declare a transformation function once and then use that transformation across multiple templates.
+ 
+	Built-in Pipes
+		- Angular provides several built-in pipes that you can use out of the box. Some of the most commonly used built-in pipes include:
+			DatePipe: Formats dates.
+			CurrencyPipe: Formats numbers as currency.
+			DecimalPipe: Formats numbers as decimal values.
+			PercentPipe: Formats numbers as percentages.
+			SlicePipe: Creates a new array or string containing a subset of the original data.
+			JsonPipe: Converts an object into a JSON string.	
+            	
+	Custom Pipes
+		- You can create your own custom pipes in Angular by implementing the PipeTransform interface and using the @Pipe decorator.
+			Ex: import { Pipe, PipeTransform } from '@angular/core';
+				@Pipe({
+				  name: 'exponential'
+				})
+				export class SomethingPipe implements PipeTransform {
+				    transform(value: string, args: number): unknown {
+					console.log(args);
+					if (value.length > args) {
+					  return value.slice(0, args).padEnd(args + 3, '.');
+					} else {
+					  return value;
+					}
+				  }
+				}
+			usage: <h1>Hello from {{ name | something: 5 }}</h1> // Angul...
+ 
+	Pure and Impure Pipes
+		- Pure Pipes: These are the default type. They only re-evaluate when the input reference changes. This is efficient and often recommended for performance.
+		- Impure Pipes: These re-evaluate every time change detection runs, regardless of whether the input reference has changed.
+		Ex: @Pipe({
+			  name: 'impurePipe',
+			  pure: false
+			})
+ 
+	Chaining pipes:
+		Ex: <p>Final Price: {{ price | currency:'USD' | uppercase }}</p>
+		Ex:	<p>Shortened Text: {{ longText | slice:0:20 | uppercase }}</p>		
+ 
+	Asynchronous Pipes:
+		- The AsyncPipe subscribes to an observable or a promise and returns the latest value.
+		- It automatically handles subscriptions and unsubscriptions, making it useful for handling data streams.
+		Ex: <p>Data: {{ data$ | async }}</p>
+ 

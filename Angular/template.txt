@@ -1,0 +1,103 @@
+Templates
+ 
+	Property Binding
+		Ex: <button [disabled]="isFormValid">Save</button>
+			<section [style.display]="isExpanded ? 'block' : 'none'">
+ 
+	String Interpolation
+		Ex: <p>{{something}}</p>
+        
+	Event Binding:
+		Ex: <input type="text" (keyup)="updateField()" />
+			<input type="text" (click)="fieldClicked()" />
+			<input type="text" (keyup)="updateField($event)" />
+				updateField(event: KeyboardEvent): void {
+				 console.log(`The user pressed: ${event.key}`);
+				}
+	Two Way Binding: 
+		- The syntax for two-way binding is a combination of square brackets and parentheses, [()]. Angular community refers to this syntax as "banana-in-a-box".
+		Ex: import { Component } from '@angular/core';
+			import { FormsModule } from '@angular/forms';
+			@Component({
+			  standalone: true,
+			  imports: [FormsModule],
+			  template: `
+				<main>
+				  <h2>Hello {{ firstName }}!</h2>
+				  <input type="text" [(ngModel)]="firstName" />
+				</main>
+			  `
+			})
+			export class AppComponent {
+			  firstName = 'Ada';
+			}
+ 
+	Built-in control flow: 
+		- Still have to see syntaxes for *ngIf, *ngFor, *ngSwitch
+			- This control flow is around 90% faster than older replacements
+			1. @if(){} @else{}
+			2. @switch (accessLevel) {
+				  @case ('admin') { <admin-dashboard/> }
+				  @case ('moderator') { <moderator-dashboard/> }
+				  @default { <user-dashboard/> }
+				}
+			3.	@for (user of users; track user.id) {
+				  {{ user.name }}
+				} @empty {
+				  Empty list of users
+				}
+	Contextual variables in @for blocks
+		- Inside @for blocks, several implicit variables are always available:
+			Variable	Meaning
+			$count	Number of items in a collection iterated over
+			$index	Index of the current row
+			$first	Whether the current row is the first row
+			$last	Whether the current row is the last row
+			$even	Whether the current row index is even
+			$odd	Whether the current row index is odd
+ 
+		// With aliased name
+		Ex: @for (item of items; track item.id; let idx = $index, e = $even) {
+			  <p>Item #{{ idx }}: {{ item.name }}</p>
+			}
+ 
+	Deffered View blocks:
+		- The new deferrable views, allow you to lazily load the list of comments and all their transitive dependencies with a single line of declarative code:
+		- It have following options: on idle, on interaction, on viewport, when <exp>, on hover
+		Ex:	@defer {
+			  <comment-list />
+			}
+		Ex:	@defer {
+			  <comment-list />
+			} @placeholder { when not comment-list} 
+		Ex: @defer (on viewport) {
+			  <comment-list/>
+			} @loading {
+			  Loading…
+			} @error {
+			  Loading failed :(
+			} @placeholder {
+			  <img src="comments-placeholder.png">
+			}
+ 
+	Local @let variable
+		- Declare a variable in template.
+		- A template reference variable can refer to the following:
+			a DOM element within a template (including custom elements)
+			an Angular component or directive
+			a TemplateRef from an ng-template
+ 
+	NgTemplate
+		Ex: <p>This is a normal element</p>
+			<ng-template #myFragment>
+			  <p>This is a fragment</p>
+			</ng-template>
+			<ng-container [ngTemplateOutlet]="myFragment" />
+ 
+	ViewContainerRef
+		- If you want to insert new component or template, you need to tell Angular where to put this element. And that’s what ViewContainerRef is.
+		Ex: @ViewChild('stepContainer', { read: ViewContainerRef, static: true }) stepContainer!: ViewContainerRef;
+			stepContainer.clear();
+			stepContainer.createComponent(component);
+		Ex: @ViewChild('fragmentOne', {read: TemplateRef}) fragmentOne: TemplateRef<unknown> | undefined;
+ 
