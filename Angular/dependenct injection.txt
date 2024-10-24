@@ -1,0 +1,130 @@
+Dependency Injection And Services
+ 
+	- Dependency Injection (DI) is a technique in which a class receives its dependencies from external sources rather than creating them itself.
+ 
+	Consumer:
+		- The Consumer is the class (Component, Directive, or Service) that needs the Dependency.
+ 
+	Dependency:
+		- The Service that we want to in our consumer.
+ 
+	Injection Token (DI Token) and Ways to inject Services 
+		- The Injection Token (DI Token) uniquely identifies a Dependency.
+		DI Token:
+			- We declare the Provider with providers metadata. This is what it looks like:
+			Ex: providers :[{ provide: ProductService, useClass: ProductService }]
+			provide: - The first property "Provide" holds the Token or DI Token. 
+					 - The Tokens act like a key. The DI systems need the key to locate provider in the Providers array.		
+					 - The Token can be either a type, a string or an instance of InjectionToken:
+						Type Token: 
+							- Here the type being injected is used as the token.
+							Ex: providers :[{ provide: ProductService, useClass: ProductService }]
+							- Angular does not complain if we use the token again. In such a situation last to register wins.
+							Ex:   providers: [
+									{ provide: ProductService, useClass: ProductService },
+									{ provide: ProductService, useClass: BetterProductService }
+								  ]
+						String Token:
+							- Ex: providers: [{ provide: 'PRODUCT_SERVICE', useClass: ProductService }]   
+							  Usage: constructor(
+										@Inject('PRODUCT_SERVICE') private productService: ProductService
+									 ) {}	 
+						Injection Token:
+							- Not undestood.
+	Provider:
+		- The Providers Maintain the list of Dependencies along with their Injection Token.
+		- It uses the Injection Token is to identify the Dependency.
+		- Angular Providers allows us to register classes, functions, or values (dependencies) with the Angular Dependency Injection system.
+		- There are four types of providers: 
+			Class Provider : useClass
+				- Use the Class Provider useClass, when you want to provide an instance of the provided class.
+				Ex: providers :[{ provide: ProductService, useClass: ProductService }]
+				Shortcut: providers: [ProductService]
+ 
+				- You can provide a mock/Fake class for Testing purposes as shown below
+				Ex: providers :[{ provide: ProductService, useClass: fakeProductService }]
+ 
+			Value Provider: useValue
+				- Use the Value Provider useValue, when you want to provide a simple value.
+				- The Angular will injects whatever provided in the useValue as it is.
+				Ex: providers :[ {provide:'USE_FAKE', useValue: true}]
+					providers :[ {provide:'USE_FAKE_STRING', useValue: "string"}]
+					providers: [{ provide: 'APP_CONFIG', useValue: APP_CONFIG_OBJECT }]
+				Usage: inject it:
+					constructor(
+						@Inject('APP_CONFIG') public appConfig: any
+					  ) {}
+ 
+			Factory Provider: useFactory
+				- Conditionally set the token
+				Ex: {
+					  provide: ProductService,
+					  useFactory: (USE_FAKE, LoggerService) =>
+						USE_FAKE ? new FakeProductService() : new ProductService(LoggerService),
+					  deps: ['USE_FAKE', LoggerService]
+					}
+ 
+			Aliased Class Provider: useExisting
+				- Use Aliased Provider useExisting when you want to use the new provider in place of the old Provider.
+				- Note that we need to pass the token to the useExisting and not type.
+				Ex: providers: [
+						{ provide: ProductService, useExisting: 'PRODUCT_SERVICE' },
+						{ provide: 'PRODUCT_SERVICE', useClass: NewProductService },
+					]
+ 
+ 
+	@Injectable: 
+		- To consume dependency you need @injectable() which tells angular that it must inject given dependecy in DI.
+		- We do not have to use the @Injectible if the class does not have any dependencies.
+		- @injectable in all service is best practice for future proofing and consistency.
+ 
+	ProvidedIn: 
+		- Without providedIn we need to declare service to Providers array.
+		- Just add providedIn metadata with the value root. This is recommand way.
+		Ex: @Injectable({
+			  providedIn:'root'
+			})
+		- We can access them from evry component as it is in root/ it is app-scoped.
+ 
+	ProvidedIn Of Services and its options:
+		ProvidedIn 'root' :
+			- Use the ProvidedIn root option, when you want to register the application-level singleton service. This will make it available to the entire application.
+			- This is irrespective of whether the service is lazy loaded or eagerly loaded.
+ 
+		ProvidedIn 'any':
+			- Use ProvidedIn: any when you want every lazy-loaded module to get its own instance of the service.
+			The eagerly loaded modules always share the instance provided by the Root Module Injector. Hence this will not have any effect on them.
+ 
+		ProvidedIn 'platform':
+			- This is useful if you have multiple Angular Apps running on a single page. 
+			- Not in deep.
+ 
+	Singelton Services:
+		- A singleton service is a service for which only one instance exists in an app.
+ 
+	Tree-Shakable Services:
+		- Service will be part of build only if it is used/injected in application. is known as tree-shakable service.
+		- Using the providedIn  is the preferred way as it makes the service tree shakeable.
+		- When service is @injectable({ providedIn: 'root' }) then it becames tree-shakable service.
+		- If used in providers array regardless of use it will be part of build.
+ 
+	ViewProviders:
+		- viewProvider allows us to make providers available only for the component’s view, and it is not available for the content children.
+		- If set, used by the component, child components, and View Children
+		- Content children always use providers array.
+		Ex: @Component({
+			  selector: 'app-child1',
+			  template:template,
+			  providers:[{provide:LogService,useClass:LogService}],
+			  viewProviders:[{provide:LogService,useClass:LogupdatedService}]
+			})
+			export class Child1Component implements OnInit {}
+ 
+		template: <h2>App Componnet</h2>
+					<app-child1>
+						<app-child2></app-child2>
+					</app-child1>
+ 
+		- So both child1 and child 2 component have same token used in ts file which is LogService.
+		- But different classes as from providers and viewProviders.	
+ 

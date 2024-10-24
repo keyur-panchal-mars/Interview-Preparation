@@ -1,0 +1,153 @@
+Routing
+ 
+	404 Page / WildCard:
+		- { path: '**', component: <component-name> }
+		-   { path: '**', component: PageNotFoundComponent },  // Wildcard route for a 404 page
+ 
+	Accessing Query Params and Fragments
+		Ex: export const routes: Routes = [
+			  {path: 'hero/:id', component: HeroDetailComponent}
+			];
+		Usage: constructor(private route: ActivatedRoute) {}
+				this.heroes$ = this.route.paramMap.pipe(
+				switchMap(params => {
+				  this.selectedId = Number(params.get('id'));
+				  return this.service.getHeroes();
+				});
+ 
+	Lazy loading:
+		Ex: {
+			 path: 'lazy',
+			 loadComponent: () => import('./lazy.component').then(c => c.LazyComponent)
+			}
+ 
+	Router-Outlet vs RouterLink
+		- <router-outlet /> is where the route will be displayed whereever puted in template. Can be used in child routes.
+		- RouterLink used to redirect from template.
+ 
+	Guards:
+		- Guards are used to control access to routes and protect navigation based on specific conditions.
+ 
+		CanActivate:
+			- Decides if a route can be activated.
+			- Use when you want to prevent unauthorized access to a route (e.g., authentication checks).
+			- Returns true to allow navigation or false to deny it.
+			Ex: AuthGuard
+				export class AuthGuard implements CanActivateFn {
+				  constructor(private authService: AuthService, private router: Router) {}
+ 
+				  canActivate(
+					route: ActivatedRouteSnapshot,
+					state: RouterStateSnapshot): boolean {
+					if (this.authService.isAuthenticated()) {
+					  return true;
+					}
+					this.router.navigate(['/login']);
+					return false;
+				  }
+				}
+			Usage: {  path: '/your-path',  component: YourComponent,  canActivate: [AuthGuard]}
+ 
+		CanActivateChild:
+			- Similar to CanActivate, but applied to child routes.
+			- Useful for guarding access to nested routes.
+			- Implement using CanActivateChildFn interface.
+			Ex: export class AdminAuthGuard implements CanActivateChildFn {
+				  constructor(private authService: AuthService, private router: Router) {}
+				  canActivateChild(): boolean {
+					if (this.authService.isUserLoggedIn() && this.authService.isAdmin()) {
+					  return true; // Allow access if the user is logged in and is an admin
+					} else {
+					  this.router.navigate(['/unauthorized']); // Redirect if not authorized
+					  return false; // Prevent access to admin child routes
+					}
+				  }
+			Usage: {
+					path: 'admin',
+					component: AdminPanelComponent,
+					canActivateChild: [AdminAuthGuard], // Apply AdminAuthGuard to protect child routes
+					children: [
+					  // Child routes accessible only to authenticated admins
+					  // Example: /admin/users, /admin/settings, etc.
+					]
+				  },
+ 
+		CanDeactivate:
+			- Decides if a route can be deactivated (e.g., when a user tries to leave a page with unsaved changes).
+			- Typically returns a boolean or a confirmation dialog.
+			Ex: 
+				export interface CanComponentDeactivate {
+				  canDeactivate: () => Observable<boolean> | Promise<boolean> | boolean;
+				}
+				@Injectable({
+				  providedIn: 'root'
+				})
+				export class PreventUnsavedChangesGuard implements CanDeactivate<CanComponentDeactivate> {
+				  canDeactivate(component: CanComponentDeactivate): Observable<boolean> | Promise<boolean> | boolean {
+					return component.canDeactivate ? component.canDeactivate() : true;
+				  }
+				}
+			Usage:
+				export class EditComponent implements CanComponentDeactivate {
+				  // Track if changes are made to the form
+				  hasUnsavedChanges = false;
+ 
+				  // Method to check if there are unsaved changes
+				  canDeactivate(): boolean {
+					if (this.hasUnsavedChanges) {
+					  return confirm('You have unsaved changes. Are you sure you want to leave?');
+					}
+					return true;
+				  }
+				}
+			Route: {
+					path: 'edit-profile',
+					component: EditComponent,
+					canDeactivate: [PreventUnsavedChangesGuard],
+				  },
+ 
+		CanMatch:
+			- It returns a function that checks certain condition to allow access.
+			- Use when you have some conditions to access and some to not.
+			Ex: export const abcTestingRoutes: Routes = [
+				  {
+					path: '',
+					loadComponent: () => import('./a/a.component').then((m) => m.AComponent),
+					canMatch: [() => d100() < 20],
+				  },
+				  {
+					path: '',
+					loadComponent: () => import('./b/b.component').then((m) => m.BComponent),
+					canMatch: [() => d100() < 50],
+				  },
+				  {
+					path: '',
+					loadComponent: () => import('./d/d.component').then((m) => m.DComponent),
+				  },
+				}
+				const d100 = (): number => Math.floor(Math.random() * 99) + 1;
+ 
+		Resolve
+			- Used to pre-fetch data before a route is activated.
+			- When you want to pass data in param load data then allow the route so can access data from route.
+ 
+		CanLoad: 
+			- deprecated
+			- Prevents a module from being loaded lazily until certain conditions are met.
+ 
+	Router Events:
+		- Router Events are part of the Angular Router module and are emitted during the navigation lifecycle.
+		- You can subscribe to router events in the ngOnInit lifecycle hook.
+		- Angular provides several router events that you can subscribe to. The main events are:
+			NavigationStart: Fired when navigation starts.
+			RoutesRecognized: Fired when the router recognizes the routes.
+			NavigationEnd: Fired when navigation ends successfully.
+			NavigationCancel: Fired when navigation is canceled.
+			NavigationError: Fired when there is an error during navigation.
+			ChildActivationStart: Fired when a child route is activated.
+			ChildActivationEnd: Fired when a child route is deactivated.
+			ActivationStart: Fired when a route is activated.
+			ActivationEnd: Fired when a route is deactivated.
+ 
+		Ex: this.router.events.pipe()
+ 

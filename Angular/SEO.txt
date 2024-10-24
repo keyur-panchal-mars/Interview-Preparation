@@ -1,0 +1,7 @@
+SEO 
+	Title/Meta from platform Browser:
+		- Use Angular’s Meta and Title services to dynamically set meta tags for different routes.
+		Ex: constructor(private meta: Meta, private title: Title) and use instance's methods.
+	Dynamic Title via routes:
+		Ex: { path: 'login', component: LoginComponent, title: 'Login' }
+    Also the SSR and hydration are more useful to index websites.

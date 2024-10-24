@@ -1,0 +1,68 @@
+Forms
+	https://blog.angular-university.io/introduction-to-angular-2-forms-template-driven-vs-model-driven/
+ 
+	Template Driven:	
+		- Need to import FormsModule.
+		Ex:     <form #myForm="ngForm" (ngSubmit)="onSubmitTemplateBased(myForm.value)">
+					<p>
+						<label>First Name:</label>
+						<input type="text"  
+							[(ngModel)]="user.firstName" required>
+					</p>
+					<p>
+						<button type="submit" [disabled]="!myForm.valid">Submit</button>
+					</p>
+				</form>
+		Usage: user: Object = {};
+				onSubmitTemplateBased(user) {
+					console.log(user);
+				}
+	Reactive:
+		- Need to import ReactiveFormsModule.
+		- Reactive forms are more scalable than template-driven forms.
+		Ex:   name = new FormControl('');
+		Usage:  <label for="name">Name: </label>
+				<input id="name" type="text" [formControl]="name">
+		Ex:   profileForm = new FormGroup({
+				firstName: new FormControl(''),
+				lastName: new FormControl(''),
+			  });
+		Usage: <form [formGroup]="profileForm">
+				  <label for="first-name">First Name: </label>
+				  <input id="first-name" type="text" formControlName="firstName">
+				  <label for="last-name">Last Name: </label>
+				  <input id="last-name" type="text" formControlName="lastName">
+				</form>
+		Classes:
+			AbstractControl: The abstract base class for classes FormControl, FormGroup, and FormArray. It provides their common behaviors and properties.
+			FormControl: Manages the value and validity status of an individual form control.
+			FormGroup: Manages the value and validity state of a group of AbstractControl instances. 
+			FormArray: Manages the value and validity state of a numerically indexed array of AbstractControl instances.
+			FormBuilder: An injectable service that provides factory methods for creating control instances.		
+ 
+		Directive: 
+			FormControl: Syncs a standalone FormControl instance to a form control element.
+			FormControlName: Syncs FormControl in an existing FormGroup instance to a form control element by name.
+			FormGroup: Syncs an existing FormGroup instance to a DOM element.
+			FormGroupName: Syncs a nested FormGroup instance to a DOM element.
+			FormArrayName: Syncs a nested FormArray instance to a DOM element.
+ 
+	Custom Validator in Both Types of Forms:
+		- Use validatorFn for custom validator functiont type.
+		- Must return ValidationErrors | null.
+ 
+		Ex: export function matchPassword(): ValidatorFn {
+			  return (control: AbstractControl): ValidationErrors | null => {
+				const newPassword: string = control.get('newPassword')?.value;
+				const confirmPassword: string = control.get('confirmPassword')?.value;
+				if (confirmPassword === newPassword) {
+				  return null;
+				}
+				return { matchPassword: true };
+			  };
+			}
+		Usage: changePasswordForm = this.fb.group({
+				oldPassword: this.fb.control('', {validators: [Validators.required], asyncValidators: [checkOldPassword()], updateOn: 'blur'} ),
+				newPassword: this.fb.control('', { validators: [Validators.required, Validators.pattern(regexPatterns.spaceOnly)] }),
+				confirmPassword: this.fb.control('',Validators.required),
+			}, { validators: [matchPassword()] });

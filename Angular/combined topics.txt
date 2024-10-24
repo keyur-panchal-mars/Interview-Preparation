@@ -2,7 +2,7 @@ Links
 	Angular.dev / Angular.io
 	Tektutorialshub.com
 	blog.angular-university.io
- 
+
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
  
 Angular latest Updates
@@ -32,62 +32,62 @@ Angular latest Updates
  
 Angular Life Cycle
  
-- The life cycle of a component begins when Angular creates the component class. The first method that gets invoked is class Constructor.
-- Constructor is neither a life cycle hook nor is it specific to Angular.  It is a Javascript feature.
+ - The life cycle of a component begins when Angular creates the component class. The first method that gets invoked is class Constructor.
+ - Constructor is neither a life cycle hook nor is it specific to Angular.  It is a Javascript feature.
  
-Execution order: 
+ Execution order: 
 	constructor > ngOnChanges > ngOnInit > ngDoCheck > ngAfterContentInit and ngAfterViewInit > ngAfterContentChecked and ngAfterViewChecked > > afterNextRender afterRender > ngOnDestroy 
  
-1. ngOnChanges:
-	- Whenever any Input or Output propery updates angular fires this hook and it returns data in simpleObject.
-	- SimpleChanges consist of { previousValue, currentValue, FirstChange: boolean }
-	Ex: ngOnChanges(changes: SimpleChanges) { console.log(changes) } 
-2. ngOnInit:
-	- This hook is fired only once and immediately after its creation.
-	- Here we can initialize needed configuration or data. Also we can use the ngOnChanges's data too.
-	Ex: ngOnInit() { this.getData(); }
-3. ngDoCheck:
-	- The Angular invokes the ngDoCheck hook event during every change detection cycle. 
-	- This hook is invoked even if there is no change in any of the properties.
-	- We can use to create custom change detection when angular fails to detect the changes.
-	- Angular recommands use only you have no other option.
-4. ngAfterContentInit:
-	- The parent injects the content between the opening & closing element.  Angular passes this content to the child component.
-	- This way we can pass html content and child can have them. Also there is configurations too. to identify and use specific content.
-	Ex: child
-			<h2>Child Component</h2>
-			<ng-content></ng-content>   <!-- placehodler for content from parent -->
-		parent
-			<h1>Parent Component</h1>
-			<app-child> This <b>content</b> is injected from parent</app-child>
-5. ngAfterContentChecked:
-	- ngAfterContentChecked Life cycle hook is called during every change detection cycle after Angular finishes checking of component’s projected content.
-6. ngAfterViewInit:
-	- ngAfterViewInit hook is called after the Component’s View & all its child views are fully initialized.
-	- This hook is called during the first change detection cycle, where angular initializes the view for the first time.
-7. ngAfterViewChecked
-	- The Angular fires this hook after it checks & updates the component’s views and child views.
-8. afterRender
-	- Runs every time all components have been rendered to the DOM.
-	Ex: @ViewChild('content') private _contentRef!: ElementRef;
-		  constructor() {
-			afterRender(() => {
-			  const element = this._contentRef.nativeElement;
-			  console.log(`After render, content position: (${element.offsetLeft}, ${element.offsetTop})`);
-			});
-		  }
-9. afterNextRender	
-	- Runs once the next time that all components have been rendered to the DOM.
-	Ex: constructor(){
-			afterNextRender(() => {
-			  // Focus the first input element in this component.
-			  elementRef.nativeElement.querySelector('input')?.focus();
-			});
-		} 
-10. ngOnDestroy
-	- Calls once when component is being destroyed.
-	- Can reset preoperties, clear data, unsubscribe observables.
- 
+ 1. ngOnChanges:
+ 	- Whenever any Input or Output propery updates angular fires this hook and it returns data in simpleObject.
+ 	- SimpleChanges consist of { previousValue, currentValue, FirstChange: boolean }
+ 	Ex: ngOnChanges(changes: SimpleChanges) { console.log(changes) } 
+ 2. ngOnInit:
+ 	- This hook is fired only once and immediately after its creation.
+ 	- Here we can initialize needed configuration or data. Also we can use the ngOnChanges's data too.
+ 	Ex: ngOnInit() { this.getData(); }
+ 3. ngDoCheck:
+ 	- The Angular invokes the ngDoCheck hook event during every change detection cycle. 
+ 	- This hook is invoked even if there is no change in any of the properties.
+ 	- We can use to create custom change detection when angular fails to detect the changes.
+ 	- Angular recommands use only you have no other option.
+ 4. ngAfterContentInit:
+ 	- The parent injects the content between the opening & closing element.  Angular passes this content to the child component.
+ 	- This way we can pass html content and child can have them. Also there is configurations too. to identify and use specific content.
+ 	Ex: child
+ 			<h2>Child Component</h2>
+ 			<ng-content></ng-content>   <!-- placehodler for content from parent -->
+ 		parent
+ 			<h1>Parent Component</h1>
+ 			<app-child> This <b>content</b> is injected from parent</app-child>
+ 5. ngAfterContentChecked:
+ 	- ngAfterContentChecked Life cycle hook is called during every change detection cycle after Angular finishes checking of component’s projected content.
+ 6. ngAfterViewInit:
+ 	- ngAfterViewInit hook is called after the Component’s View & all its child views are fully initialized.
+ 	- This hook is called during the first change detection cycle, where angular initializes the view for the first time.
+ 7. ngAfterViewChecked
+ 	- The Angular fires this hook after it checks & updates the component’s views and child views.
+ 8. afterRender
+ 	- Runs every time all components have been rendered to the DOM.
+ 	Ex: @ViewChild('content') private _contentRef!: ElementRef;
+ 		  constructor() {
+ 			afterRender(() => {
+ 			  const element = this._contentRef.nativeElement;
+ 			  console.log(`After render, content position: (${element.offsetLeft}, ${element.offsetTop})`);
+ 			});
+ 		  }
+ 9. afterNextRender	
+ 	- Runs once the next time that all components have been rendered to the DOM.
+ 	Ex: constructor(){
+ 			afterNextRender(() => {
+ 			  // Focus the first input element in this component.
+ 			  elementRef.nativeElement.querySelector('input')?.focus();
+ 			});
+ 		} 
+ 10. ngOnDestroy
+ 	- Calls once when component is being destroyed.
+ 	- Can reset preoperties, clear data, unsubscribe observables.
+  
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
  
 Templates
@@ -395,86 +395,511 @@ Components
  
 Forms
 	https://blog.angular-university.io/introduction-to-angular-2-forms-template-driven-vs-model-driven/
-	Template Driven 
-	Reactive 
-	Custom Validator in Both Types of Forms
  
+	Template Driven:	
+		- Need to import FormsModule.
+		Ex:     <form #myForm="ngForm" (ngSubmit)="onSubmitTemplateBased(myForm.value)">
+					<p>
+						<label>First Name:</label>
+						<input type="text"  
+							[(ngModel)]="user.firstName" required>
+					</p>
+					<p>
+						<button type="submit" [disabled]="!myForm.valid">Submit</button>
+					</p>
+				</form>
+		Usage: user: Object = {};
+				onSubmitTemplateBased(user) {
+					console.log(user);
+				}
+	Reactive:
+		- Need to import ReactiveFormsModule.
+		- Reactive forms are more scalable than template-driven forms.
+		Ex:   name = new FormControl('');
+		Usage:  <label for="name">Name: </label>
+				<input id="name" type="text" [formControl]="name">
+		Ex:   profileForm = new FormGroup({
+				firstName: new FormControl(''),
+				lastName: new FormControl(''),
+			  });
+		Usage: <form [formGroup]="profileForm">
+				  <label for="first-name">First Name: </label>
+				  <input id="first-name" type="text" formControlName="firstName">
+				  <label for="last-name">Last Name: </label>
+				  <input id="last-name" type="text" formControlName="lastName">
+				</form>
+		Classes:
+			AbstractControl: The abstract base class for classes FormControl, FormGroup, and FormArray. It provides their common behaviors and properties.
+			FormControl: Manages the value and validity status of an individual form control.
+			FormGroup: Manages the value and validity state of a group of AbstractControl instances. 
+			FormArray: Manages the value and validity state of a numerically indexed array of AbstractControl instances.
+			FormBuilder: An injectable service that provides factory methods for creating control instances.		
+ 
+		Directive: 
+			FormControl: Syncs a standalone FormControl instance to a form control element.
+			FormControlName: Syncs FormControl in an existing FormGroup instance to a form control element by name.
+			FormGroup: Syncs an existing FormGroup instance to a DOM element.
+			FormGroupName: Syncs a nested FormGroup instance to a DOM element.
+			FormArrayName: Syncs a nested FormArray instance to a DOM element.
+ 
+	Custom Validator in Both Types of Forms:
+		- Use validatorFn for custom validator functiont type.
+		- Must return ValidationErrors | null.
+ 
+		Ex: export function matchPassword(): ValidatorFn {
+			  return (control: AbstractControl): ValidationErrors | null => {
+				const newPassword: string = control.get('newPassword')?.value;
+				const confirmPassword: string = control.get('confirmPassword')?.value;
+				if (confirmPassword === newPassword) {
+				  return null;
+				}
+				return { matchPassword: true };
+			  };
+			}
+		Usage: changePasswordForm = this.fb.group({
+				oldPassword: this.fb.control('', {validators: [Validators.required], asyncValidators: [checkOldPassword()], updateOn: 'blur'} ),
+				newPassword: this.fb.control('', { validators: [Validators.required, Validators.pattern(regexPatterns.spaceOnly)] }),
+				confirmPassword: this.fb.control('',Validators.required),
+			}, { validators: [matchPassword()] });
+
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
  
 Directives
-	Component Directives
-	Attribute Directives
-	Structural Directives
-	Custom Directives
+ 
+	- Directives are classes that add additional behavior to elements in your Angular applications.
+ 
+	Component Directives:
+		- Used with a template. This type of directive is the most common directive type.
+ 
+	Attribute Directives:
+		- Change the appearance or behavior of an element, component, or another directive.
+		- List of directives
+			NgClass: Adds and removes a set of CSS classes.
+				Ex: <div [ngClass]="isSpecial ? 'special' : ''">This div is special</div>
+ 
+			NgStyle: Adds and removes a set of HTML styles.
+				Ex: <div [ngStyle]="{'border-color': currentIndex == 0 ? 'var(--primary)' : ''}"></div>
+			NgModel: Adds two-way data binding to an HTML form element.
+				Ex: <input type="text" [(ngModel)]="firstName">
+ 
+	Structural Directives:
+		- Change the DOM layout by adding and removing DOM elements.
+		- You can only apply one structural directive per element when using the shorthand syntax.
+		Ex: *ngFor, *ngIf, *ngSwitch
+ 
+	Custom Directives:
+		- Use ng generate directive directive-name.	
+		- Use ElementRef and Renderer2.
+		Ex: @Directive({
+			  selector: '[appTest]',
+			  standalone: true,
+			})
+			export class TestDirective {
+			  constructor(private el: ElementRef, private renderer2: Renderer2) {}
+ 
+			  @HostListener('mouseover') methodName() {
+				this.renderer2.setStyle(this.el.nativeElement, 'backgroundColor', 'yellow');
+			  }
+			  @HostListener('mouseleave') name(){
+				this.renderer2.removeStyle(this.el.nativeElement, 'backgroundColor');
+			  }
+			}
+		Usage: Import Directive
+			- <button appTest>Hover it</button>
  
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
  
 Dependency Injection And Services
-	Basic Dependency Injection
-	Injectable Services
-	ProvidedIn Of Services and its options
-	Ways to inject Services 
-	Singelton Services
-	Tree-Shakable Services
-	ViewProviders
-	Providers: UseClass, UserExisting, UseFactory
+ 
+	- Dependency Injection (DI) is a technique in which a class receives its dependencies from external sources rather than creating them itself.
+ 
+	Consumer:
+		- The Consumer is the class (Component, Directive, or Service) that needs the Dependency.
+ 
+	Dependency:
+		- The Service that we want to in our consumer.
+ 
+	Injection Token (DI Token) and Ways to inject Services 
+		- The Injection Token (DI Token) uniquely identifies a Dependency.
+		DI Token:
+			- We declare the Provider with providers metadata. This is what it looks like:
+			Ex: providers :[{ provide: ProductService, useClass: ProductService }]
+			provide: - The first property "Provide" holds the Token or DI Token. 
+					 - The Tokens act like a key. The DI systems need the key to locate provider in the Providers array.		
+					 - The Token can be either a type, a string or an instance of InjectionToken:
+						Type Token: 
+							- Here the type being injected is used as the token.
+							Ex: providers :[{ provide: ProductService, useClass: ProductService }]
+							- Angular does not complain if we use the token again. In such a situation last to register wins.
+							Ex:   providers: [
+									{ provide: ProductService, useClass: ProductService },
+									{ provide: ProductService, useClass: BetterProductService }
+								  ]
+						String Token:
+							- Ex: providers: [{ provide: 'PRODUCT_SERVICE', useClass: ProductService }]   
+							  Usage: constructor(
+										@Inject('PRODUCT_SERVICE') private productService: ProductService
+									 ) {}	 
+						Injection Token:
+							- Not undestood.
+	Provider:
+		- The Providers Maintain the list of Dependencies along with their Injection Token.
+		- It uses the Injection Token is to identify the Dependency.
+		- Angular Providers allows us to register classes, functions, or values (dependencies) with the Angular Dependency Injection system.
+		- There are four types of providers: 
+			Class Provider : useClass
+				- Use the Class Provider useClass, when you want to provide an instance of the provided class.
+				Ex: providers :[{ provide: ProductService, useClass: ProductService }]
+				Shortcut: providers: [ProductService]
+ 
+				- You can provide a mock/Fake class for Testing purposes as shown below
+				Ex: providers :[{ provide: ProductService, useClass: fakeProductService }]
+ 
+			Value Provider: useValue
+				- Use the Value Provider useValue, when you want to provide a simple value.
+				- The Angular will injects whatever provided in the useValue as it is.
+				Ex: providers :[ {provide:'USE_FAKE', useValue: true}]
+					providers :[ {provide:'USE_FAKE_STRING', useValue: "string"}]
+					providers: [{ provide: 'APP_CONFIG', useValue: APP_CONFIG_OBJECT }]
+				Usage: inject it:
+					constructor(
+						@Inject('APP_CONFIG') public appConfig: any
+					  ) {}
+ 
+			Factory Provider: useFactory
+				- Conditionally set the token
+				Ex: {
+					  provide: ProductService,
+					  useFactory: (USE_FAKE, LoggerService) =>
+						USE_FAKE ? new FakeProductService() : new ProductService(LoggerService),
+					  deps: ['USE_FAKE', LoggerService]
+					}
+ 
+			Aliased Class Provider: useExisting
+				- Use Aliased Provider useExisting when you want to use the new provider in place of the old Provider.
+				- Note that we need to pass the token to the useExisting and not type.
+				Ex: providers: [
+						{ provide: ProductService, useExisting: 'PRODUCT_SERVICE' },
+						{ provide: 'PRODUCT_SERVICE', useClass: NewProductService },
+					]
+ 
+ 
+	@Injectable: 
+		- To consume dependency you need @injectable() which tells angular that it must inject given dependecy in DI.
+		- We do not have to use the @Injectible if the class does not have any dependencies.
+		- @injectable in all service is best practice for future proofing and consistency.
+ 
+	ProvidedIn: 
+		- Without providedIn we need to declare service to Providers array.
+		- Just add providedIn metadata with the value root. This is recommand way.
+		Ex: @Injectable({
+			  providedIn:'root'
+			})
+		- We can access them from evry component as it is in root/ it is app-scoped.
+ 
+	ProvidedIn Of Services and its options:
+		ProvidedIn 'root' :
+			- Use the ProvidedIn root option, when you want to register the application-level singleton service. This will make it available to the entire application.
+			- This is irrespective of whether the service is lazy loaded or eagerly loaded.
+ 
+		ProvidedIn 'any':
+			- Use ProvidedIn: any when you want every lazy-loaded module to get its own instance of the service.
+			The eagerly loaded modules always share the instance provided by the Root Module Injector. Hence this will not have any effect on them.
+ 
+		ProvidedIn 'platform':
+			- This is useful if you have multiple Angular Apps running on a single page. 
+			- Not in deep.
+ 
+	Singelton Services:
+		- A singleton service is a service for which only one instance exists in an app.
+ 
+	Tree-Shakable Services:
+		- Service will be part of build only if it is used/injected in application. is known as tree-shakable service.
+		- Using the providedIn  is the preferred way as it makes the service tree shakeable.
+		- When service is @injectable({ providedIn: 'root' }) then it becames tree-shakable service.
+		- If used in providers array regardless of use it will be part of build.
+ 
+	ViewProviders:
+		- viewProvider allows us to make providers available only for the component’s view, and it is not available for the content children.
+		- If set, used by the component, child components, and View Children
+		- Content children always use providers array.
+		Ex: @Component({
+			  selector: 'app-child1',
+			  template:template,
+			  providers:[{provide:LogService,useClass:LogService}],
+			  viewProviders:[{provide:LogService,useClass:LogupdatedService}]
+			})
+			export class Child1Component implements OnInit {}
+ 
+		template: <h2>App Componnet</h2>
+					<app-child1>
+						<app-child2></app-child2>
+					</app-child1>
+ 
+		- So both child1 and child 2 component have same token used in ts file which is LogService.
+		- But different classes as from providers and viewProviders.	
  
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
  
 Routing
-	Path-Match
-	404 Page / WildCard
+ 
+	404 Page / WildCard:
+		- { path: '**', component: <component-name> }
+		-   { path: '**', component: PageNotFoundComponent },  // Wildcard route for a 404 page
+ 
 	Accessing Query Params and Fragments
-	Lazy loading
+		Ex: export const routes: Routes = [
+			  {path: 'hero/:id', component: HeroDetailComponent}
+			];
+		Usage: constructor(private route: ActivatedRoute) {}
+				this.heroes$ = this.route.paramMap.pipe(
+				switchMap(params => {
+				  this.selectedId = Number(params.get('id'));
+				  return this.service.getHeroes();
+				});
+ 
+	Lazy loading:
+		Ex: {
+			 path: 'lazy',
+			 loadComponent: () => import('./lazy.component').then(c => c.LazyComponent)
+			}
+ 
 	Router-Outlet vs RouterLink
-	Guards
-		Auth Guards and its relatives
-		CanActivate
-		CanActivateChild
-		CanDeactivate
+		- <router-outlet /> is where the route will be displayed whereever puted in template. Can be used in child routes.
+		- RouterLink used to redirect from template.
+ 
+	Guards:
+		- Guards are used to control access to routes and protect navigation based on specific conditions.
+ 
+		CanActivate:
+			- Decides if a route can be activated.
+			- Use when you want to prevent unauthorized access to a route (e.g., authentication checks).
+			- Returns true to allow navigation or false to deny it.
+			Ex: AuthGuard
+				export class AuthGuard implements CanActivateFn {
+				  constructor(private authService: AuthService, private router: Router) {}
+ 
+				  canActivate(
+					route: ActivatedRouteSnapshot,
+					state: RouterStateSnapshot): boolean {
+					if (this.authService.isAuthenticated()) {
+					  return true;
+					}
+					this.router.navigate(['/login']);
+					return false;
+				  }
+				}
+			Usage: {  path: '/your-path',  component: YourComponent,  canActivate: [AuthGuard]}
+ 
+		CanActivateChild:
+			- Similar to CanActivate, but applied to child routes.
+			- Useful for guarding access to nested routes.
+			- Implement using CanActivateChildFn interface.
+			Ex: export class AdminAuthGuard implements CanActivateChildFn {
+				  constructor(private authService: AuthService, private router: Router) {}
+				  canActivateChild(): boolean {
+					if (this.authService.isUserLoggedIn() && this.authService.isAdmin()) {
+					  return true; // Allow access if the user is logged in and is an admin
+					} else {
+					  this.router.navigate(['/unauthorized']); // Redirect if not authorized
+					  return false; // Prevent access to admin child routes
+					}
+				  }
+			Usage: {
+					path: 'admin',
+					component: AdminPanelComponent,
+					canActivateChild: [AdminAuthGuard], // Apply AdminAuthGuard to protect child routes
+					children: [
+					  // Child routes accessible only to authenticated admins
+					  // Example: /admin/users, /admin/settings, etc.
+					]
+				  },
+ 
+		CanDeactivate:
+			- Decides if a route can be deactivated (e.g., when a user tries to leave a page with unsaved changes).
+			- Typically returns a boolean or a confirmation dialog.
+			Ex: 
+				export interface CanComponentDeactivate {
+				  canDeactivate: () => Observable<boolean> | Promise<boolean> | boolean;
+				}
+				@Injectable({
+				  providedIn: 'root'
+				})
+				export class PreventUnsavedChangesGuard implements CanDeactivate<CanComponentDeactivate> {
+				  canDeactivate(component: CanComponentDeactivate): Observable<boolean> | Promise<boolean> | boolean {
+					return component.canDeactivate ? component.canDeactivate() : true;
+				  }
+				}
+			Usage:
+				export class EditComponent implements CanComponentDeactivate {
+				  // Track if changes are made to the form
+				  hasUnsavedChanges = false;
+ 
+				  // Method to check if there are unsaved changes
+				  canDeactivate(): boolean {
+					if (this.hasUnsavedChanges) {
+					  return confirm('You have unsaved changes. Are you sure you want to leave?');
+					}
+					return true;
+				  }
+				}
+			Route: {
+					path: 'edit-profile',
+					component: EditComponent,
+					canDeactivate: [PreventUnsavedChangesGuard],
+				  },
+ 
+		CanMatch:
+			- It returns a function that checks certain condition to allow access.
+			- Use when you have some conditions to access and some to not.
+			Ex: export const abcTestingRoutes: Routes = [
+				  {
+					path: '',
+					loadComponent: () => import('./a/a.component').then((m) => m.AComponent),
+					canMatch: [() => d100() < 20],
+				  },
+				  {
+					path: '',
+					loadComponent: () => import('./b/b.component').then((m) => m.BComponent),
+					canMatch: [() => d100() < 50],
+				  },
+				  {
+					path: '',
+					loadComponent: () => import('./d/d.component').then((m) => m.DComponent),
+				  },
+				}
+				const d100 = (): number => Math.floor(Math.random() * 99) + 1;
+ 
 		Resolve
-	Router Reference
-	Types Of lazy Loading
+			- Used to pre-fetch data before a route is activated.
+			- When you want to pass data in param load data then allow the route so can access data from route.
+ 
+		CanLoad: 
+			- deprecated
+			- Prevents a module from being loaded lazily until certain conditions are met.
+ 
+	Router Events:
+		- Router Events are part of the Angular Router module and are emitted during the navigation lifecycle.
+		- You can subscribe to router events in the ngOnInit lifecycle hook.
+		- Angular provides several router events that you can subscribe to. The main events are:
+			NavigationStart: Fired when navigation starts.
+			RoutesRecognized: Fired when the router recognizes the routes.
+			NavigationEnd: Fired when navigation ends successfully.
+			NavigationCancel: Fired when navigation is canceled.
+			NavigationError: Fired when there is an error during navigation.
+			ChildActivationStart: Fired when a child route is activated.
+			ChildActivationEnd: Fired when a child route is deactivated.
+			ActivationStart: Fired when a route is activated.
+			ActivationEnd: Fired when a route is deactivated.
+ 
+		Ex: this.router.events.pipe()
  
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
  
 HTTP Client
-	Get/Post/Patch Call With Possible Options
-	Interceptors
+	- use in config provideHttpClient() > import { HttpClient } from '@angular/common/http' > create instance http = inject(HttpClient); and use methods via instance.
+ 
+	Configuring Requests:
+		- Create headers and use them in requests.
+		Headers:		
+			Ex:	const headers = new HttpHeaders({
+				  'Content-Type': 'application/json',
+				  Authorization: 'Bearer your-token-here',
+				});
+		Params:
+			Ex: let params = new HttpParams().set('page', page.toString()).set('limit', limit.toString()).set('sort', 'asc');
+ 
+	HTTP Interceptors:
+		- Allow you to intercept and modify HTTP requests and responses globally.
+		- They are useful for adding authentication tokens, logging requests, handling errors, and modifying request and response data.
+ 
+		Ex: export class AuthInterceptor implements HttpInterceptor {
+			  intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+				// Clone the request and add the new header
+				const clonedRequest = req.clone({
+				  headers: req.headers.set('Authorization', 'Bearer your-token-here'),
+				});
+ 
+				// Pass the cloned request instead of the original request to the next handle
+				return next.handle(clonedRequest);
+			  }
+		Usage: in Config file
+			provideHttpClient(      
+			  withInterceptors([AuthInterceptor])
+			),
  
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
  
-Angular Decoraters
+Angular Decoraters:
+	- Decorators are special types of declarations that can be attached to a class, method, accessor, property, or parameter.
+	- They are essentially functions that modify the behavior of the entity they are attached to.
+	- Common decoraters are 
+		@Component
+		@NgModule
+		@Injectable
+		@Input and @Output
+		@ViewChild and @ViewChildren
+		@HostBinding and @HostListener
+		@Pipe
  
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
  
-Angular Modules
+Angular Modules:
+	- Modules are way to organize and manage related components, services, directives, and other code units.
+	- Modules help developers encapsulate functionality and promote code reusability and maintainability.
+	- Angular application has at least one module, the root module, which is usually named AppModule
+	Structure:
+		- The @NgModule decorator takes a metadata object that defines the module's properties
+		Ex: @NgModule({
+			  declarations: [
+				AppComponent, // Components, directives, and pipes that belong to this module
+			  ],
+			  imports: [
+				BrowserModule, // Other modules whose exported classes are needed in the component templates of this module
+			  ],
+			  providers: [
+				// Services available to this module
+			  ],
+			  bootstrap: [AppComponent] // The root component that Angular creates and inserts into the index.html host web page
+			})
+			export class AppModule {}
  
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
  
-Angular CLI
+Angular CLI:
+	- The Angular CLI (Command Line Interface) is a powerful tool that simplifies the development process of Angular applications.
+	- It provides a wide range of commands to automate tasks like creating components, services, and modules, running tests, building applications, and much more.
+	-	ng new
+		ng serve
+		ng generate
+		ng build
+		ng test
  
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
  
 Miscellaneous
 	Creating Global Error Handler
 	Component Architecture: Smart vs. Dumb Components
-	Migrating/Upgrading From Older Versions	
+	Migrating/Upgrading From Older Versions
 	Multiple Apps in One Angular Project
 	Angular.json questions
  
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
  
 SEO 
-	Title/Meta from platform Browser
-	Dynamic Title via routes
+	Title/Meta from platform Browser:
+		- Use Angular’s Meta and Title services to dynamically set meta tags for different routes.
+		Ex: constructor(private meta: Meta, private title: Title) and use instance's methods.
+	Dynamic Title via routes:
+		Ex: { path: 'login', component: LoginComponent, title: 'Login' }
  
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
  
-Rxjs => added separate file 
+Rxjs => added separate file
 	Observables
 	Subscriptions 
 	Most Used Operators
+	Subjects
  
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------	
 Signals => added separate file 
@@ -487,8 +912,8 @@ Signals => added separate file
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
  
 Angular Universal
+	- Something like ng add @angular/ssr or @angular/universal
 	Server Side Rendering
 	Hydration
  
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
- 

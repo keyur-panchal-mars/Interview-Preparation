@@ -1,0 +1,21 @@
+ 
+Angular Modules:
+	- Modules are way to organize and manage related components, services, directives, and other code units.
+	- Modules help developers encapsulate functionality and promote code reusability and maintainability.
+	- Angular application has at least one module, the root module, which is usually named AppModule
+	Structure:
+		- The @NgModule decorator takes a metadata object that defines the module's properties
+		Ex: @NgModule({
+			  declarations: [
+				AppComponent, // Components, directives, and pipes that belong to this module
+			  ],
+			  imports: [
+				BrowserModule, // Other modules whose exported classes are needed in the component templates of this module
+			  ],
+			  providers: [
+				// Services available to this module
+			  ],
+			  bootstrap: [AppComponent] // The root component that Angular creates and inserts into the index.html host web page
+			})
+			export class AppModule {}
+ 

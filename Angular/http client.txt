@@ -1,0 +1,32 @@
+HTTP Client
+	- use in config provideHttpClient() > import { HttpClient } from '@angular/common/http' > create instance http = inject(HttpClient); and use methods via instance.
+ 
+	Configuring Requests:
+		- Create headers and use them in requests.
+		Headers:		
+			Ex:	const headers = new HttpHeaders({
+				  'Content-Type': 'application/json',
+				  Authorization: 'Bearer your-token-here',
+				});
+		Params:
+			Ex: let params = new HttpParams().set('page', page.toString()).set('limit', limit.toString()).set('sort', 'asc');
+ 
+	HTTP Interceptors:
+		- Allow you to intercept and modify HTTP requests and responses globally.
+		- They are useful for adding authentication tokens, logging requests, handling errors, and modifying request and response data.
+ 
+		Ex: export class AuthInterceptor implements HttpInterceptor {
+			  intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+				// Clone the request and add the new header
+				const clonedRequest = req.clone({
+				  headers: req.headers.set('Authorization', 'Bearer your-token-here'),
+				});
+ 
+				// Pass the cloned request instead of the original request to the next handle
+				return next.handle(clonedRequest);
+			  }
+		Usage: in Config file
+			provideHttpClient(      
+			  withInterceptors([AuthInterceptor])
+			),
+ 

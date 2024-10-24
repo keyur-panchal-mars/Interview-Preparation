@@ -1,0 +1,8 @@
+Angular CLI:
+	- The Angular CLI (Command Line Interface) is a powerful tool that simplifies the development process of Angular applications.
+	- It provides a wide range of commands to automate tasks like creating components, services, and modules, running tests, building applications, and much more.
+	-	ng new
+		ng serve
+		ng generate
+		ng build
+		ng test

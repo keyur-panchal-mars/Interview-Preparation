@@ -1,0 +1,43 @@
+Directives
+ 
+	- Directives are classes that add additional behavior to elements in your Angular applications.
+ 
+	Component Directives:
+		- Used with a template. This type of directive is the most common directive type.
+ 
+	Attribute Directives:
+		- Change the appearance or behavior of an element, component, or another directive.
+		- List of directives
+			NgClass: Adds and removes a set of CSS classes.
+				Ex: <div [ngClass]="isSpecial ? 'special' : ''">This div is special</div>
+ 
+			NgStyle: Adds and removes a set of HTML styles.
+				Ex: <div [ngStyle]="{'border-color': currentIndex == 0 ? 'var(--primary)' : ''}"></div>
+			NgModel: Adds two-way data binding to an HTML form element.
+				Ex: <input type="text" [(ngModel)]="firstName">
+ 
+	Structural Directives:
+		- Change the DOM layout by adding and removing DOM elements.
+		- You can only apply one structural directive per element when using the shorthand syntax.
+		Ex: *ngFor, *ngIf, *ngSwitch
+ 
+	Custom Directives:
+		- Use ng generate directive directive-name.	
+		- Use ElementRef and Renderer2.
+		Ex: @Directive({
+			  selector: '[appTest]',
+			  standalone: true,
+			})
+			export class TestDirective {
+			  constructor(private el: ElementRef, private renderer2: Renderer2) {}
+ 
+			  @HostListener('mouseover') methodName() {
+				this.renderer2.setStyle(this.el.nativeElement, 'backgroundColor', 'yellow');
+			  }
+			  @HostListener('mouseleave') name(){
+				this.renderer2.removeStyle(this.el.nativeElement, 'backgroundColor');
+			  }
+			}
+		Usage: Import Directive
+			- <button appTest>Hover it</button>
+ 
