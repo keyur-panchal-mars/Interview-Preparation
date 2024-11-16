@@ -140,7 +140,7 @@ Components
 				Ex: @component({...encapsulation: ViewEncapsulation.Emulated})
 			2. none
 				- In this mode, Angular does not add any encapsulation to the styles. 
-				- The styles defined in the component are applied globally, affecting all elements that match
+				- The styles defined in the component are applied globally, affecting all elements that match.
 				Ex: @component({...encapsulation: ViewEncapsulation.none})
 			3. Shadow DOM
 				- Uses something Shadow DOM technolog. 

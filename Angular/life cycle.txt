@@ -4,10 +4,10 @@ Angular Life Cycle
 - Constructor is neither a life cycle hook nor is it specific to Angular.  It is a Javascript feature.
  
 Execution order: 
-	constructor > ngOnChanges > ngOnInit > ngDoCheck > ngAfterContentInit and ngAfterViewInit > ngAfterContentChecked and ngAfterViewChecked > > afterNextRender afterRender > ngOnDestroy 
+	constructor > ngOnChanges > ngOnInit > ngDoCheck > ngAfterContentInit and ngAfterViewInit > ngAfterContentChecked and ngAfterViewChecked > afterNextRender > afterRender > ngOnDestroy 
  
 1. ngOnChanges:
-	- Whenever any Input or Output propery updates angular fires this hook and it returns data in simpleObject.
+	- Whenever any Input or Output propery updates, angular fires this hook and it returns data in SimpleChanges.
 	- SimpleChanges consist of { previousValue, currentValue, FirstChange: boolean }
 	Ex: ngOnChanges(changes: SimpleChanges) { console.log(changes) } 
 
