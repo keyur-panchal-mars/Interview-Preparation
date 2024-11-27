@@ -48,7 +48,7 @@ Composite data types
 			console.log(a.name) // abc
  
 	- Object.assign
-		- Before spread operator this was used.
+		- Before spread operator Object.assign was used.
 		- You have to be careful though, as the first argument in the Object.assign() method actually gets modified and returned. So make sure that you pass the object to copy at least as the second argument. 
 		Ex: 
 			const a = {

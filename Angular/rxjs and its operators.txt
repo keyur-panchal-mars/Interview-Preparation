@@ -146,7 +146,7 @@ Rxjs Operators:
 			debounceTime(500) // Wait 500ms after the user stops typing
 		);
 7. throttleTime
-- limit the rate at which values are emitted by an Observable
+- limit the rate at which values are emitted by an Observable.
 - Emits the first value immediately and then ignores all other values for the specified duration.
 - Once the duration ends, it emits the next value and repeats the process.	
 	Ex: // Create an Observable for button clicks
@@ -170,7 +170,7 @@ Transformation Operators
 	Ex: of(1,2,3).pipe(map(val => val * 2)).subscribe(val => console.log(val)); //1,4,6
 2. pluck
 	Extract a specific property from emitted objects in an observable stream.
-	Ex: of({name:"s",id:1},{name:"cg",id:4},{name:"ede",id:2}).pipe(pluck('name')).subscribe(val => console.log(name)); // logs "s","cg","ede"
+	Ex: of({name:"s",id:1},{name:"cg",id:4},{name:"ede",id:2}).pipe(pluck('name')).subscribe(val => console.log(val)); // logs "s","cg","ede"
 3. bufferTime
 	Collect emitted values until provided time has passed, emit as array.
 	Ex: interval(500).pipe(bufferTime(2000)).subscribe(); //every 2 sec[0,1,2,3], [4,5,,6,7]
@@ -193,22 +193,7 @@ Transformation Operators
 		).subscribe(result => {
 			console.log(result);
 	});
-6. concatMap
-	project each value emitted by an Observable into a new Observable and then merge the resulting Observables sequentially. This means that concatMap subscribes to each inner Observable in the order they are emitted and waits for each inner Observable to complete before moving on to the next.
-	Key Features of concatMap
-		Sequential Emission: It ensures that the emissions from the inner Observables are sequential and respect the order of the original emissions.
-		Waiting for Completion: It waits for each inner Observable to complete before subscribing to the next one.
-		Flattening Observables: It flattens the emissions from the inner Observables into a single Observable stream.
-	Ex: 
-	of('Apple', 'Banana', 'Cherry').pipe(
-		concatMap(fruit => {
-			// Create an inner Observable for each fruit
-			return of(`${fruit} is ready`).pipe(delay(1000)); // Delay to simulate async operation
-		})
-		).subscribe(result => {
-			console.log(result);
-	});
-7. switchMap
+6. switchMap
 	Maps each value emitted by an observable into a new observable, but it does so with a unique behavior: it will unsubscribe from the previous inner observable whenever a new value is emitted.
 	switchMap maintains only one inner subscription at a time.
 	Ex: fromEvent(document, 'click').pipe(

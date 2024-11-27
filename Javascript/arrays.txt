@@ -57,13 +57,13 @@ Array methods
     Usage: Executes a reducer function on each element of the array, resulting in a single output value.
     Example:
         const arr = [1, 2, 3, 4];
-        const sum = arr.reduce((acc, num) => acc + num, 0); // sum is 10find()
+        const sum = arr.reduce((acc, num) => acc + num, 0); // sum is 10
  
 11. find()
     Usage: Returns the value of the first element in the array that satisfies the provided testing function.
     Example:
         const arr = [1, 2, 3, 4];
-        const found = arr.find(num => num > 2); // found is 3some()
+        const found = arr.find(num => num > 2); // found is 3
  
 12. some()
     Usage: Tests whether at least one element in the array passes the test implemented by the provided function.

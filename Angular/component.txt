@@ -1,6 +1,6 @@
 Components	
 	- Components are the fundamental building blocks of the application.
-	- Consists of three main parts: the template, the class (which defines the behavior), and the styles. 
+	- Consists of three main parts: the template, the class (which defines the behavior), and the styles.
 	- Each component is a self-contained unit that encapsulates its logic and view, promoting reusability and maintainability.
  
 	Standalone Components:
@@ -12,16 +12,16 @@ Components
 		- In Angular, @Input and @Output are decorators used to facilitate communication.
 		- parent to child with @Input: 
 			Ex: @Input() value = 0;
-			Ex:  @Input({required: true}) value = 0;
+			Ex: @Input({required: true}) value = 0;
 			Ex: @Input({alias: 'sliderValue'}) value = 0;
-			Usage: <custom-slider [value]="50" />			
+			Usage: <custom-slider [value]="50" />	
 		- child to parent using @Output:
 			- Define events that a child component can emit to notify its parent component.
 			- It works with an EventEmitter.
 			Ex: @Output() messageEvent = new EventEmitter<string>();
 				sendMessage() {
 					this.messageEvent.emit('Hello from Child!'); // Emit event with data
-				  }
+				}
 			Usage: <app-child (messageEvent)="receiveMessage($event)"></app-child>
 					receiveMessage(event: string) {
 						this.message = event; // Update message when event is received
@@ -32,7 +32,7 @@ Components
 				callChildMethod() {
 					this.child.childMethod(); // Calling a method from ChildComponent
 				}
- 
+
 	Content-Projection:
 		- The parent injects the content between the opening & closing element.  Angular passes this content to the child component.
 		- This way we can pass html content and child can have them. Also there is configurations too. to identify and use specific content.
@@ -45,31 +45,31 @@ Components
  
 	@HostBinding and @HostListener:
 		- Used directly in component class. Not in ngOnInit or constructor.
- 
+
 		@HostBinding:
 		- The @HostBinding decorator allows you to bind a property of the host element to a property of the directive or component.
 		Ex: // Bind a class to the host element
 			@HostBinding('class.active') isActive = true;
- 
+
 		@HostListener:
 		- The @HostListener decorator allows you to listen to events on the host element. 
 		- This is useful for reacting to user interactions like clicks, mouse movements, and other DOM events.
 		Ex:    // Listen for mouseenter events on the host element
 			   @HostListener('mouseenter') onmouseenter() {
 				console.log('Mouse entered the host element!');
-			  }
- 
+			   }
+
 	DOM Manipulation - Element Reference and Renderer
 		- When need DOM manipulation avoid document.getElementById('id').remove() kind of stuff.
 		- Use ElementRef and Renderer2 as angular will get to know the changes.
 		- Always use Renderer2 and ElementRef together as renderer tells angular what changes while elementRef doen't.
- 
+
 		ElementRef: 
 			- Creates the dom Element
 			Ex: constructor(elementRef: ElementRef) {
 					console.log(elementRef.nativeElement);
 				  }
- 
+
 		Renderer2:
 			- Any DOM elements created by a component's Renderer2 participate in that component's style encapsulation.
 			- It allows developers to interact with the DOM without directly manipulating it.
@@ -79,15 +79,15 @@ Components
 						// Change the text content using Renderer2
 						this.renderer.setProperty(div, 'textContent', 'Text Changed!');
 				}
- 
+
 	Dynamically Rendering Components:
- 
+
 		- If you want to insert new component or template, you need to tell Angular where to put this element. And that’s what ViewContainerRef is.
 		Ex: @ViewChild('stepContainer', { read: ViewContainerRef, static: true }) stepContainer!: ViewContainerRef;
 			stepContainer.clear();
 			stepContainer.createComponent(component);
 		Ex: @ViewChild('fragmentOne', {read: TemplateRef}) fragmentOne: TemplateRef<unknown> | undefined;
- 
+
 	ChangeDetector:
 		- Change detection can be manually triggered using Angular's ChangeDetectorRef service.
 		1. detectChanges():
@@ -97,6 +97,7 @@ Components
 					this.title = 'Title Changed';
 					this.cdr.detectChanges(); // Manually trigger change detection
 				  }
+
 		2. markForCheck():
 			- Marks the component and its ancestors to be checked for changes on the next change detection cycle.
 			Ex:	constructor(private cdr: ChangeDetectorRef) {}
@@ -104,6 +105,7 @@ Components
 					this.title = 'Title Changed';
 					this.cdr.markForCheck(); // Mark for check
 				  }
+
 		3. detach() and reattach():
 			- detach(): Detaches the component from the change detection tree. The view will not be updated unless explicitly called.
 			- reattach(): Reattaches the component back to the change detection tree.
@@ -118,7 +120,7 @@ Components
      			  this.cdr.detectChanges(); // Manually trigger change detection
      			  console.log('Component reattached and change detection triggered.');
 				}
- 
+
 	ChangeDetectionStrategy:
 		- The @Component decorator accepts a changeDetection option that controls the component's change detection mode. 
 		- It has two modes :
@@ -130,7 +132,7 @@ Components
 					1. A component input has changes as a result of a binding in a template, or
 					2. An event listener in this component runs or
 					3. The component is explicitly marked for check, via ChangeDetectorRef.markForCheck or something which wraps it, like AsyncPipe.
- 
+
 	ViewEncapsulation
 		- View Encapsulation is a mechanism that determines how styles are applied to components.
 		- It has three options:
@@ -143,7 +145,6 @@ Components
 				- The styles defined in the component are applied globally, affecting all elements that match.
 				Ex: @component({...encapsulation: ViewEncapsulation.none})
 			3. Shadow DOM
-				- Uses something Shadow DOM technolog. 
+				- Uses something Shadow DOM technology. 
 				- This provides the most encapsulation, but it is not supported in all browsers.
 				Ex: @component({...encapsulation: ViewEncapsulation.ShadowDom})
- 

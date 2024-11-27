@@ -12,14 +12,14 @@ Angular latest Updates
 		Deferrable views:
 			- Added in Template part
 		Signals:
-			Added in separate file 
+			- Added in separate file 
 		Angular material 3 is stable
  
 	Angular 18:
 		- Control flow Now stable
 		- Defferable views now stable
 		- Angular.dev is new site for angular
-		- @let = 10 in templates // not used 
+		- @let = 10 in templates // not used
 		- Historically, a library called zone.js has been responsible for triggering Angular’s change detection. You can try the experimental zoneless support in Angular.
 		Ex: bootstrapApplication(App, {
 			  providers: [

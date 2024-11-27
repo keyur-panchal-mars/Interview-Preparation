@@ -25,7 +25,7 @@ What is hoisting in javascript ?
 
 What is diff between let var and const.
 - Var is functional scope else window/ global means if no function then it will be global.
-- Let and const are blocn scope. Means in {}
+- Let and const are block scope. Means in {}
 - Let and var both hoisted. 
 - We can use var before defining. It will give undefined. 	
 - We can not use let and const before defining. Will give error of "initalization".
@@ -36,7 +36,7 @@ What is diff between let var and const.
 -----------------------------------------------------------------------------------------------------------------
 
 What is "temporal dead zone"
-- When accessing assigned variable with let and const gives error and known ad "TDZ".
+- When accessing assigned variable with let and const gives error and known as "TDZ".
 
 -----------------------------------------------------------------------------------------------------------------
 
@@ -191,8 +191,10 @@ type coercion Falsy Values and  == && === testing equality.
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 IIFE (Immediately Invoked Function Expression) and Modules
-	1. !function test { something }();  2. (function test { something })();  3. (function test { something }());  
+	1. !function test { something }();  
 	-With ! js runs code as expression. Other replacer are +,-,~. Basically any unary operator can be used
+	2. (function test { something })();  
+	3. (function test { something }());  
  
 	Ex: With Params
 	1. (function test(param) { console.log(paam) })(1);

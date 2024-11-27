@@ -9,7 +9,7 @@ Pipes
 			DecimalPipe: Formats numbers as decimal values.
 			PercentPipe: Formats numbers as percentages.
 			SlicePipe: Creates a new array or string containing a subset of the original data.
-			JsonPipe: Converts an object into a JSON string.	
+			JsonPipe: Converts an object into a JSON string.
             	
 	Custom Pipes
 		- You can create your own custom pipes in Angular by implementing the PipeTransform interface and using the @Pipe decorator.
@@ -18,7 +18,7 @@ Pipes
 				  name: 'exponential'
 				})
 				export class SomethingPipe implements PipeTransform {
-				    transform(value: string, args: number): unknown {
+				    transform(value: string, args: number): string {
 					console.log(args);
 					if (value.length > args) {
 					  return value.slice(0, args).padEnd(args + 3, '.');

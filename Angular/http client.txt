@@ -25,6 +25,7 @@ HTTP Client
 				// Pass the cloned request instead of the original request to the next handle
 				return next.handle(clonedRequest);
 			  }
+		}
 		Usage: in Config file
 			provideHttpClient(      
 			  withInterceptors([AuthInterceptor])

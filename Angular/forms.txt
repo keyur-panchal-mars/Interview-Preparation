@@ -48,7 +48,7 @@ Forms
 			FormArrayName: Syncs a nested FormArray instance to a DOM element.
  
 	Custom Validator in Both Types of Forms:
-		- Use validatorFn for custom validator functiont type.
+		- Use validatorFn for custom validator function type.
 		- Must return ValidationErrors | null.
  
 		Ex: export function matchPassword(): ValidatorFn {

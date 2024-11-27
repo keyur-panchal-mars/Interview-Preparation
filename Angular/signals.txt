@@ -9,7 +9,7 @@ Signals
 - Signals are functions.
 - You must pass initial value.
     Ex: counter = signal(0);
- Tget value of signal write as function.//html {{counter()}}
+ 	get value of signal write as function.//html {{counter()}}
  How to modify the value of a signal?
  	set() as long as the value is of the same type as the initial value of the signal.
  		Ex: this.counter.set(1);
@@ -57,7 +57,7 @@ Detecting signal changes with the effect() API
 - By default, Angular does not allow a signal value to be changed from inside an effect function.
     Ex: effect(()=>{ this.counter.set(1) })
     Output: Writing to signals is not allowed in a computed or an effect by default
-    Solution: effect(()=>{ this.counter.set(1) },{allowSignalWrites: true})
+    Solution: effect(()=>{ this.counter.set(1) },{ allowSignalWrites: true })
     //Use very carefully
 
 - Destroy of effect is required, angular does automatically for manually:
@@ -87,7 +87,7 @@ How to create signal-based reactive data services
 	readOnly couterReadOnly = counter.asReadOnly();
  
 	increment(){
-		this.counter().update(val => val + 1)
+		this.counter().update(val => val + 1);
 	}
 
 -----------------------------------------------------------------------------------------------------------------

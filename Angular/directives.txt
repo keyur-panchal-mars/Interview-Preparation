@@ -34,10 +34,10 @@ Directives
 			  @HostListener('mouseover') methodName() {
 				this.renderer2.setStyle(this.el.nativeElement, 'backgroundColor', 'yellow');
 			  }
+			  
 			  @HostListener('mouseleave') name(){
 				this.renderer2.removeStyle(this.el.nativeElement, 'backgroundColor');
 			  }
 			}
 		Usage: Import Directive
 			- <button appTest>Hover it</button>
- 
