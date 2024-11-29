@@ -1,0 +1,33 @@
+Angular latest Updates
+
+	Angular 19:
+		- New build system: faster builds
+		- Stabilized signals and added resource api (Signals) with that we can call apis as well.
+		- Server side rendering improved with incremental hydration
+		- Instant edit/refresh with hot module replacement
+			- With styles updates no page reload on browser
+		- Reporting unused imports in standalone components
+			- Gives warning in terminal
+
+	Angular 18:
+		- Control flow Now stable
+		- Defferable views now stable
+		- Angular.dev is new site for angular
+		- @let = 10 in templates // not used
+		- Historically, a library called zone.js has been responsible for triggering Angular’s change detection. You can try the experimental zoneless support in Angular.
+		Ex: bootstrapApplication(App, {
+			  providers: [
+				provideExperimentalZonelessChangeDetection()
+			  ]
+			});
+			After adding the provider, remove zone.js from your polyfills in angular.json.
+
+	Angular 17:
+		Built-in control flow:
+			- Added in Template part
+		Deferrable views:
+			- Added in Template part
+		Signals:
+			- Added in separate file 
+		Angular material 3 is stable
+ 
