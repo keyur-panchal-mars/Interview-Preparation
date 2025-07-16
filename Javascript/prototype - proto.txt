@@ -1,0 +1,34 @@
+prototype-inheritance
+ 
+- Used when we want to take something and extend it.
+- When we read a property from object, and it’s missing, JavaScript automatically takes it from the prototype.
+- First it checks in own object then prototype.
+Ex: 
+	let animal = {
+	  eats: true
+	};
+	let rabbit = {
+	  jumps: true
+	};
+ 
+	rabbit.__proto__ = animal;
+	alert( rabbit.eats ); // true
+	Here we can say that "animal is the prototype of rabbit" or "rabbit prototypically inherits from animal".
+ 
+There are only two limitations:
+-	The references can’t go in circles. JavaScript will throw an error if we try to assign __proto__ in a circle.
+-	The value of __proto__ can be either an object or null. Other types are ignored.
+- 	Also it may be obvious, but still: there can be only one [[Prototype]]. An object may not inherit from two others.
+ 
+- __proto__ is a historical getter/setter for [[Prototype]]
+
+- Other built-in objects such as Array, Date, Function and others also keep methods in prototypes.
+- For instance, when we create an array [1, 2, 3], the default new Array() constructor is used internally. So Array.prototype becomes its prototype and provides methods. That’s very memory-efficient.
+ 
+Ex: [1,2,3] => Array.prototype => Object.Prototype
+Ex: function(){} => Function.prototype => Object.Prototype
+Ex: 5 => Number.prototype => Object.Prototype
+ 
+- The methods are stored in the prototype (Array.prototype, Object.prototype, Date.prototype, etc.)
+- Primitives also store methods in prototypes of wrapper objects: Number.prototype, String.prototype and Boolean.prototype. 
+- Only undefined and null do not have wrapper objects.

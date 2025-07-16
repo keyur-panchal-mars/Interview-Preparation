@@ -1,0 +1,22 @@
+Is javascript compiled or interpreted language?
+ 
+	Compiled Language: The code compiled and validated before execution. Will fire error if code is invalid at any line. Then it executes.
+		Compiled: Initally slow but overall faster in execution. More performance.
+	Interpreted Language: The code is executed line by line. 
+		Interpreted: Intially faster but overall slower in execution. Less performance.
+ 
+	Ex: console.log("something"); for(is having error); // Here something will log and ther error thus it seems interpreted.
+	Ex: console.log("something"); console.log("ss);		// Here will give error due to second invalid log, thus it seems compiled.
+ 
+	While it may seem like JavaScript code is being executed line by line, this is only true during the parsing phase.  In reality, the entire code is compiled at once to convert it into machine-readable code before execution.
+ 
+	Therefore, JavaScript is a just-in-time compiled language that uses an interpreter in its first phase. We Can Also Say that it is bit of both.
+ 
+	It uses JIT Compiler. 
+ 
+What is JIT Compiler ?
+ 
+	JIT (just-in-time) compilation is a technique used by modern JavaScript engines to improve the performance of JavaScript code.
+	JIT compiler take a middle-ground approach. They initially interpret the code and then selectively compile parts of it that are used repeatedly. This approach balances fast start-up time with improved performance.
+ 
+JavaScript code is parsed before execution, which makes it look like a parsed language, but the code is actually converted to binary(machine code that is directly executed by the computer's hardware) form before execution. This conversion process involves several steps, including transpiling the code, parsing it to an Abstract Syntax Tree (AST), converting it to bytecode, and optimizing it with a JIT compiler.

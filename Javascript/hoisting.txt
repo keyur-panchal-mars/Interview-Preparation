@@ -1,0 +1,6 @@
+What is hoisting in javascript ?
+- Hoisting is a concept or behavior in JavaScript where the declaration of a function, variable, 
+  or class goes to the top of the scope they were defined in.
+- Defined in global scope.
+- If it is defined and access it before initalization we get the undefined value. If variable is not defined and access it gets error "not defined".
+- Remember, variables are hoisted but only to the top of the scope they were declared in.

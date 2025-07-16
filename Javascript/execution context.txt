@@ -1,0 +1,24 @@
+Execution context
+ 
+How many types of execution context in javascript
+	There are two types of execution contexts: global and function.
+	JavaScript script first starts to run, and it represents the global scope in JavaScript. A function execution context is created whenever a function is called, representing the function's local scope.
+ 
+How many phases of execution context
+	Creation phase and execution phase	
+Ex : 
+	var a=1; a=5;
+	Initiates the global execution context:
+		Each execution context global or other have memory and code parts.
+		Each execution context have scope chain to determine what variables and functions the context has access to.
+		Scope chain is determined by lexical environment of the execution context.
+		Finally, the execution stack is a data structure that stores execution contexts in a last-in, first-out (LIFO) order. When a function is called, a new execution context is created and pushed onto the top of the stack. When a function returns, its execution context is popped off the stack.
+ 
+		Creation phase: 
+			Sets up memory for storing variables, function 
+			Store values as undefined		
+		Execution phase:
+			Runs Code one by one top to bottom. And for each line of code for ex if function it creates function's execution context and it also have memory and code part.
+			Allocates values as execution.
+	To keep the track of all the contexts, including global and functional, the JavaScript engine uses a call stack.
+	global execution context will be removed at last from call stack.

@@ -1,0 +1,12 @@
+What is diff between let var and const.
+- Var is functional scope else window/ global means if no function then it will be global.
+- Let and const are block scope. Means in {}
+- Let and var both hoisted. 
+- We can use var before defining. It will give undefined. 	
+- We can not use let and const before defining. Will give error of "initalization".
+- Default value of let is also undefined.
+- Const must require the value during defining.
+- We can redeclare same variable with var in any scope. We can't redeclare variable with let and const, Gives  SyntaxError "Already assigned or declared error".
+
+What is "temporal dead zone"
+- When accessing assigned variable with let and const gives error and known as "TDZ".
