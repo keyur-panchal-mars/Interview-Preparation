@@ -1,0 +1,8 @@
+IIFE (Immediately Invoked Function Expression) and Modules
+	1. !function test { something }();  
+	-With ! js runs code as expression. Other replacer are +,-,~. Basically any unary operator can be used
+	2. (function test { something })();  
+	3. (function test { something }());  
+ 
+	Ex: With Params
+	1. (function test(param) { console.log(paam) })(1);

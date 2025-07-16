@@ -1,0 +1,20 @@
+this keyword 
+ 
+1. "this" in global scope always points to the globalObject (globalObject depends on javascript runtime env)
+	In frontend it is window, like in nodejs it is global
+2. "this" in a function depends on 2 things
+	- 'this substitution': If value of this keyword is  undefined or null then it replaced by globalObject
+    a. strict / non strict mode (in strict mode, "this" is undefined, in non strict mode, "this substitution" takes place and "this" points to globalObject)
+    b. how the function is being invoked (if we invoke the function using the global object in strict mode, then "this" will point to that globalObject)
+3. "this" in a object's method (when object's property is function we call it method) always points to the object that is used to invoke the method.
+4. call, apply & bind are used to share a method with another object (hence the "this" keyword reference would also change accordingly)
+	Ex: const obj = { name: 'keyur', print = function { console.log(this.name) } }
+		obj.print(); // keyur
+ 
+		const obj2 = { name: 'newName' }
+		obj.print.call(obj2);
+ 
+5. "this" inside arrow function refers to the enclosing lexical context 
+	- lexical context means where the code is written or last scope  ... like in script only arrow function then it is global
+	- arrow function does not provide their own this binding.
+6. "this" in DOM points to the HTML element itself on which it is being used

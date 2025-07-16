@@ -1,0 +1,7 @@
+
+type coercion Falsy Values and  == && === testing equality.
+ 
+	There are only six falsy values : false,0,"",null,undefined,NaN. 
+		Comparing false,0 and "" are equals to each other.
+		Comparing null and undefined, they are only equal to themselves and each other.
+		NaN is not equivalent to anything. Even cooler, it’s not even itself!

@@ -1,0 +1,33 @@
+What is callback 
+	Callbacks are functions passed as arguments to other functions. They defer the execution of code until a certain event occurs or an operation is completed.
+	Ex: 
+ 
+What is "callback hell" and how can it be avoided or mitigated?
+	Callback Hell refers to the situation where multiple nested callbacks make code hard to read and maintain. It often occurs when dealing with multiple asynchronous operations where each depends on the result of the previous one.
+	Ex: 
+		asyncOperation1(function(err, result1) {
+		  if (err) return handleError(err);
+		  asyncOperation2(result1, function(err, result2) {
+			if (err) return handleError(err);
+			asyncOperation3(result2, function(err, result3) {
+			  if (err) return handleError(err);
+			  // Continue nesting...
+			});
+		  });
+		});
+ 
+	To avoid use promises or async await  
+	Solutions :
+		Promise: asyncOperation1().then(result1 => asyncOperation2()).then(result2 => asyncOperation3()).catch(error => log(error));
+		async await: 
+		async function asyncOperation1(){
+			try{
+				const result1 = await asyncOperation1();
+				const result2 = await asyncOperation2();
+				const result3 = await asyncOperation3();
+				log(result3)
+			} catch(err) {
+				log(err)
+			}
+ 
+		}
