@@ -20,4 +20,4 @@ document.getElementById("child").addEventListener("click", () => {
 
 
 You can prevent bubbling with:
-event.stopPropagation();
+event.stopPropagation(); 
